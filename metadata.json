@@ -1,0 +1,6 @@
+{
+  "name": "Cinematic Product Scroll Experience",
+  "description": "An immersive luxury studio showcase featuring smooth Lenis scrolling, dynamic silhouette reveals, and architectural product interactions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
