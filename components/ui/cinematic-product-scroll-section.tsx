@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { ArrowDown, Eye, Plus, Minus, MessageCircle } from "lucide-react"
+import { ArrowDown, Eye, Plus, Minus, MessageCircle, ChevronDown } from "lucide-react"
 import { animate, stagger } from "animejs"
 import Link from "next/link"
 import {
@@ -143,6 +143,7 @@ function MinimalProductCard({ product }: { product: GiftBoxProduct }) {
 function ProductHero({ product, reversed = false }: { product: GiftBoxProduct; reversed?: boolean }) {
   const sectionRef = useRef<HTMLDivElement>(null)
   const fullImageUrl = product.thumbnail ?? ""
+  const [isItemsExpanded, setIsItemsExpanded] = useState<boolean>(false)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -306,15 +307,45 @@ function ProductHero({ product, reversed = false }: { product: GiftBoxProduct; r
                 <span className="block text-[10px] text-muted-foreground uppercase mb-3 tracking-widest">
                   WHAT'S INSIDE ({product.items.length} ITEMS)
                 </span>
-                <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto no-scrollbar">
-                  {product.items.map((item: string, i: number) => (
-                    <span
-                      key={i}
-                      className="px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-full border border-border/80 bg-muted/40 text-foreground"
+
+                <div className="relative">
+                  <div
+                    className={`flex flex-wrap gap-2 transition-all duration-300 ease-in-out ${
+                      !isItemsExpanded
+                        ? "max-h-[96px] sm:max-h-none overflow-hidden pb-4 sm:pb-0"
+                        : "max-h-[600px] overflow-visible pb-6 sm:pb-0"
+                    }`}
+                  >
+                    {product.items.map((item: string, i: number) => (
+                      <span
+                        key={i}
+                        className="px-2.5 py-1 text-[10px] uppercase tracking-wider rounded-full border border-border/80 bg-muted/40 text-foreground"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Gradient fade overlay when collapsed on mobile */}
+                  {!isItemsExpanded && (
+                    <div className="sm:hidden absolute bottom-0 inset-x-0 h-9 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none" />
+                  )}
+
+                  {/* Absolute Arrow Icon placed on top of these pills in the bottom (mobile only, no background or circle) */}
+                  <div className="sm:hidden absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={() => setIsItemsExpanded((prev) => !prev)}
+                      aria-label={isItemsExpanded ? "Collapse items" : "Expand items"}
+                      className="text-foreground/90 hover:text-foreground transition-colors cursor-pointer p-1 active:scale-90"
                     >
-                      {item}
-                    </span>
-                  ))}
+                      <ChevronDown
+                        className={`w-5 h-5 transition-transform duration-300 drop-shadow-sm ${
+                          isItemsExpanded ? "rotate-180" : "rotate-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -356,6 +387,7 @@ export function Component() {
   const finalCollectionRef = useRef<HTMLDivElement>(null)
   const animeTriggered = useRef(false)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0)
+  const [isSignatureItemsExpanded, setIsSignatureItemsExpanded] = useState<boolean>(false)
 
   useEffect(() => {
     if (!finalCollectionRef.current) return
@@ -631,20 +663,50 @@ export function Component() {
                 <span className="block text-[9px] font-mono uppercase tracking-[0.3em] text-muted-foreground mb-4">
                   COMPLETE 20-ITEM ASSORTMENT
                 </span>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
-                  {GIFT_BOX_PRODUCTS[1].items.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="group/item border border-border/30 hover:border-primary/50 p-2.5 transition-colors duration-500 relative flex items-center gap-2 bg-transparent"
+
+                <div className="relative">
+                  <div
+                    className={`grid grid-cols-2 sm:grid-cols-3 gap-2.5 transition-all duration-300 ease-in-out ${
+                      !isSignatureItemsExpanded
+                        ? "max-h-[148px] sm:max-h-none overflow-hidden pb-4 sm:pb-0"
+                        : "max-h-[1200px] overflow-visible pb-6 sm:pb-0"
+                    }`}
+                  >
+                    {GIFT_BOX_PRODUCTS[1].items.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="group/item border border-border/30 hover:border-primary/50 p-2.5 transition-colors duration-500 relative flex items-center gap-2 bg-transparent"
+                      >
+                        <span className="text-[9px] font-mono text-muted-foreground">
+                          {String(idx + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-[11px] uppercase tracking-wider font-light text-foreground/90 truncate">
+                          {item}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Gradient fade overlay when collapsed on mobile */}
+                  {!isSignatureItemsExpanded && (
+                    <div className="sm:hidden absolute bottom-0 inset-x-0 h-9 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none" />
+                  )}
+
+                  {/* Absolute Arrow Icon placed on top of these pills in the bottom (mobile only, no background or circle) */}
+                  <div className="sm:hidden absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex justify-center">
+                    <button
+                      type="button"
+                      onClick={() => setIsSignatureItemsExpanded((prev) => !prev)}
+                      aria-label={isSignatureItemsExpanded ? "Collapse items" : "Expand items"}
+                      className="text-foreground/90 hover:text-foreground transition-colors cursor-pointer p-1 active:scale-90"
                     >
-                      <span className="text-[9px] font-mono text-muted-foreground">
-                        {String(idx + 1).padStart(2, "0")}
-                      </span>
-                      <span className="text-[11px] uppercase tracking-wider font-light text-foreground/90 truncate">
-                        {item}
-                      </span>
-                    </div>
-                  ))}
+                      <ChevronDown
+                        className={`w-5 h-5 transition-transform duration-300 drop-shadow-sm ${
+                          isSignatureItemsExpanded ? "rotate-180" : "rotate-0"
+                        }`}
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
 

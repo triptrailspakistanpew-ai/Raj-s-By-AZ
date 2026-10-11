@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react"
 import { GiftBoxProduct, BRAND_INFO } from "@/src/data/products"
-import { ShoppingBag, X, Check } from "lucide-react"
+import { ShoppingBag, X, Check, ChevronDown } from "lucide-react"
 
 interface ProductQuickViewModalProps {
   product: GiftBoxProduct | null
@@ -22,11 +22,13 @@ export default function ProductQuickViewModal({
   const touchStartY = useRef<number | null>(null)
   const [headerHeight, setHeaderHeight] = useState<number>(320)
   const initialHeightRef = useRef<number>(320)
+  const [isItemsExpanded, setIsItemsExpanded] = useState<boolean>(false)
 
   // Measure initial height based on viewport
   useEffect(() => {
     if (!product) return
 
+    setIsItemsExpanded(false)
     const isMobile = window.innerWidth < 640
     const initialH = isMobile ? 280 : 330
     initialHeightRef.current = initialH
@@ -204,15 +206,46 @@ export default function ProductQuickViewModal({
                 All Included
               </span>
             </div>
-            <div className="flex flex-wrap gap-1.5">
-              {product.items.map((item, i) => (
-                <span
-                  key={i}
-                  className="text-[11px] px-2.5 py-1 rounded-full bg-muted/70 border border-border text-foreground font-medium"
+
+            {/* Pills Container: on small screens, limited to 3 lines (~96px) with smooth expansion when clicking the arrow button */}
+            <div className="relative">
+              <div
+                className={`flex flex-wrap gap-1.5 transition-all duration-300 ease-in-out ${
+                  !isItemsExpanded
+                    ? "max-h-[96px] sm:max-h-none overflow-hidden pb-4 sm:pb-0"
+                    : "max-h-[600px] overflow-visible pb-6 sm:pb-0"
+                }`}
+              >
+                {product.items.map((item, i) => (
+                  <span
+                    key={i}
+                    className="text-[11px] px-2.5 py-1 rounded-full bg-muted/70 border border-border text-foreground font-medium"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+
+              {/* Gradient fade overlay when collapsed on mobile */}
+              {!isItemsExpanded && (
+                <div className="sm:hidden absolute bottom-0 inset-x-0 h-9 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none" />
+              )}
+
+              {/* Absolute Arrow Icon placed on top of these pills in the bottom (mobile only, no background or circle) */}
+              <div className="sm:hidden absolute bottom-0 left-1/2 -translate-x-1/2 z-10 flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setIsItemsExpanded((prev) => !prev)}
+                  aria-label={isItemsExpanded ? "Collapse items" : "Expand items"}
+                  className="text-foreground/90 hover:text-foreground transition-colors cursor-pointer p-1 active:scale-90"
                 >
-                  {item}
-                </span>
-              ))}
+                  <ChevronDown
+                    className={`w-5 h-5 transition-transform duration-300 drop-shadow-sm ${
+                      isItemsExpanded ? "rotate-180" : "rotate-0"
+                    }`}
+                  />
+                </button>
+              </div>
             </div>
           </div>
 
