@@ -76,13 +76,11 @@ export default function App() {
     }
   }, [])
 
-  // Lock body scroll and pause Lenis when quick view modal is open
+  // Lock body scroll when quick view modal is open
   useEffect(() => {
     if (activeModalProduct) {
-      if (lenisRef.current) lenisRef.current.stop()
       document.body.style.overflow = "hidden"
     } else {
-      if (lenisRef.current) lenisRef.current.start()
       document.body.style.overflow = ""
     }
     return () => {
