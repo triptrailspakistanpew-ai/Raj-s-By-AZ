@@ -46,6 +46,7 @@ interface CartCheckoutPageProps {
   onAddSampleItem: () => void
   onBackToStore: () => void
   onClearCart: () => void
+  onOpenPrivacy?: () => void
 }
 
 export default function CartCheckoutPage({
@@ -55,6 +56,7 @@ export default function CartCheckoutPage({
   onAddSampleItem,
   onBackToStore,
   onClearCart,
+  onOpenPrivacy,
 }: CartCheckoutPageProps) {
   // Form state
   const [fullName, setFullName] = useState("")
@@ -1054,7 +1056,27 @@ export default function CartCheckoutPage({
                       </label>
                     </div>
                     <label htmlFor="cbx-consent" className="cursor-pointer select-none leading-relaxed">
-                      I agree to share these order details with <strong>Raj's By AZ</strong> on WhatsApp to request order confirmation.
+                      I agree to share these order details with <strong>Raj&apos;s By AZ</strong> on WhatsApp under our{" "}
+                      {onOpenPrivacy ? (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            onOpenPrivacy()
+                          }}
+                          className="underline underline-offset-2 hover:text-foreground font-medium transition-colors cursor-pointer"
+                        >
+                          Privacy &amp; Discretion Charter
+                        </button>
+                      ) : (
+                        <a
+                          href="/privacy"
+                          className="underline underline-offset-2 hover:text-foreground font-medium"
+                        >
+                          Privacy &amp; Discretion Charter
+                        </a>
+                      )}{" "}
+                      to request order confirmation.
                     </label>
                   </div>
                   {formErrors.consent && (

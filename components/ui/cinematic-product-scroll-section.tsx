@@ -14,6 +14,7 @@ import {
   FAQS,
   BRAND_INFO,
 } from "@/src/data/products"
+import { EditorialHeroContraction } from "./editorial-hero-contraction"
 
 // 1. Minimal Product Card Component
 function MinimalProductCard({ product }: { product: GiftBoxProduct }) {
@@ -491,66 +492,13 @@ export function Component() {
       ref={containerRef}
       className="bg-transparent text-foreground antialiased selection:bg-primary selection:text-primary-foreground w-full animate-fade-in"
     >
-      {/* 1. Intro Section - Cinematic Version (Restored exact typography & styling) */}
-      <section className="relative h-[100dvh] w-full flex flex-col justify-center items-center overflow-hidden bg-transparent">
-
-        {/* Light Effects */}
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/5 blur-[120px] rounded-full animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-muted-foreground/10 blur-[150px] rounded-full"></div>
-
-        {/* Content */}
-        <div className="relative z-10 text-center px-6 -mt-16 md:-mt-32 w-full flex flex-col items-center justify-center">
-          <div className="overflow-hidden mb-4 md:mb-6 w-full flex justify-center">
-            <span
-              className="block text-[9px] md:text-[10px] font-black text-muted-foreground uppercase reveal text-center tracking-[0.3em] md:tracking-[0.8em] ps-[0.3em] md:ps-[0.8em]"
-              style={{ animationDelay: "0.2s" }}
-            >
-              {finalSubtitle}
-            </span>
-          </div>
-
-          <h1 className="text-4xl sm:text-6xl md:text-[8rem] lg:text-[10rem] font-black leading-[0.85] text-foreground w-full flex flex-col items-center justify-center text-center tracking-tighter">
-            <div className="overflow-hidden w-full flex justify-center">
-              <span
-                className="block reveal text-center"
-                style={{ animationDelay: "0.4s" }}
-              >
-                {mainTitleFirst}
-              </span>
-            </div>
-            <div className="overflow-hidden mt-2 w-full flex justify-center">
-              <span
-                className="block italic font-light text-muted-foreground reveal text-center"
-                style={{ animationDelay: "0.6s" }}
-              >
-                {mainTitleRest}
-              </span>
-            </div>
-          </h1>
-
-          <div className="mt-6 md:mt-12 overflow-hidden w-full flex justify-center">
-            <p
-              className="text-muted-foreground text-center text-sm md:text-base max-w-lg font-light leading-relaxed tracking-wide reveal"
-              style={{ animationDelay: "0.8s" }}
-            >
-              {finalDescription}
-            </p>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div
-          className="absolute bottom-8 md:bottom-12 flex flex-col items-center gap-4 reveal"
-          style={{ animationDelay: "1.2s" }}
-        >
-          <div className="w-[1px] h-12 md:h-20 bg-foreground/10 relative overflow-hidden">
-            <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-transparent via-foreground/50 to-transparent animate-scroll-light"></div>
-          </div>
-          <span className="text-[9px] font-bold text-foreground/40 tracking-normal">
-            SCROLL DOWN
-          </span>
-        </div>
-      </section>
+      {/* 1. Intro Section - Visage Framer Template Hero Section with Raj's By AZ Business Content */}
+      <EditorialHeroContraction
+        title={"CURATED BEAUTY\nGIFT BOXES"}
+        description="A little beauty, beautifully gifted. Discover thoughtfully curated gift boxes filled with makeup, jewellery and pretty accessories. Perfect for birthdays, special celebrations and treating yourself."
+        ctaText="EXPLORE BOXES"
+        ctaHref="#final-collection"
+      />
 
       {/* 2. Products - Render ProductHero for each item */}
       {GIFT_BOX_PRODUCTS.map((product, index) => (

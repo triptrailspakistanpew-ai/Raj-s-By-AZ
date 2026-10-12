@@ -8,12 +8,15 @@ import Lenis from "lenis"
 import DemoOne from "@/demo"
 import CartCheckoutPage, { CartItem } from "@/src/components/CartCheckoutPage"
 import ProductQuickViewModal from "@/src/components/ProductQuickViewModal"
+import PrivacyPolicyPage from "@/src/components/PrivacyPolicyPage"
 import { ShoppingBag, ArrowUpRight, ArrowLeft } from "lucide-react"
 import { GIFT_BOX_PRODUCTS, GiftBoxProduct, BRAND_INFO } from "@/src/data/products"
+import { updateHeadSeo } from "@/src/utils/seo"
+import { StickyFooter } from "@/components/ui/sticky-footer"
 
 export default function App() {
   const lenisRef = useRef<Lenis | null>(null)
-  const [currentPage, setCurrentPage] = useState<"showcase" | "cart">("showcase")
+  const [currentPage, setCurrentPage] = useState<"showcase" | "cart" | "privacy">("showcase")
   const [activeModalProduct, setActiveModalProduct] = useState<GiftBoxProduct | null>(null)
   const [addedToBag, setAddedToBag] = useState(false)
 
@@ -67,6 +70,8 @@ export default function App() {
         }
       } else if (path === "/cart" || path === "/checkout") {
         setCurrentPage("cart")
+      } else if (path === "/privacy" || path === "/privacy-policy") {
+        setCurrentPage("privacy")
       }
     }
 
@@ -92,6 +97,9 @@ export default function App() {
         setActiveModalProduct(prod || null)
       } else if (path === "/cart" || path === "/checkout") {
         setCurrentPage("cart")
+        setActiveModalProduct(null)
+      } else if (path === "/privacy" || path === "/privacy-policy") {
+        setCurrentPage("privacy")
         setActiveModalProduct(null)
       } else {
         setActiveModalProduct(null)
@@ -122,9 +130,31 @@ export default function App() {
     }
   }, [activeModalProduct])
 
+  // Synchronize document title, canonical link, and Open Graph tags
+  useEffect(() => {
+    if (activeModalProduct) {
+      updateHeadSeo("product", activeModalProduct)
+    } else if (currentPage === "cart") {
+      updateHeadSeo("cart")
+    } else if (currentPage === "privacy") {
+      updateHeadSeo("privacy")
+    } else {
+      updateHeadSeo("home")
+    }
+  }, [activeModalProduct, currentPage])
+
   // Scroll to top whenever page view toggles
-  const navigateTo = (page: "showcase" | "cart") => {
+  const navigateTo = (page: "showcase" | "cart" | "privacy") => {
     setCurrentPage(page)
+    if (typeof window !== "undefined" && window.history?.pushState) {
+      if (page === "showcase") {
+        window.history.pushState({}, "", "/")
+      } else if (page === "cart") {
+        window.history.pushState({}, "", "/cart")
+      } else if (page === "privacy") {
+        window.history.pushState({}, "", "/privacy")
+      }
+    }
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true })
     } else {
@@ -228,7 +258,7 @@ export default function App() {
 
           <div className="flex items-center gap-3 sm:gap-6">
             {/* View switcher button */}
-            {currentPage === "cart" ? (
+            {currentPage === "cart" || currentPage === "privacy" ? (
               <button
                 onClick={() => navigateTo("showcase")}
                 className="flex items-center gap-1.5 text-xs uppercase tracking-widest font-semibold hover:opacity-75 transition-opacity cursor-pointer"
@@ -237,12 +267,20 @@ export default function App() {
                 <span className="hidden sm:inline">Back to Showcase</span>
               </button>
             ) : (
-              <button
-                onClick={() => navigateTo("cart")}
-                className="text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer hidden md:inline"
-              >
-                Checkout
-              </button>
+              <>
+                <button
+                  onClick={() => navigateTo("privacy")}
+                  className="text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer hidden lg:inline"
+                >
+                  Privacy Charter
+                </button>
+                <button
+                  onClick={() => navigateTo("cart")}
+                  className="text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer hidden md:inline"
+                >
+                  Checkout
+                </button>
+              </>
             )}
 
             {/* Bag counter */}
@@ -262,11 +300,11 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main View: Showcase or Cart Page */}
+      {/* Main View: Showcase, Cart, or Privacy Policy Page */}
       <main className="relative pt-16">
         {currentPage === "showcase" ? (
           <DemoOne />
-        ) : (
+        ) : currentPage === "cart" ? (
           <CartCheckoutPage
             cart={cart}
             onUpdateQuantity={handleUpdateQuantity}
@@ -274,6 +312,13 @@ export default function App() {
             onAddSampleItem={handleAddSampleItem}
             onBackToStore={() => navigateTo("showcase")}
             onClearCart={handleClearCart}
+            onOpenPrivacy={() => navigateTo("privacy")}
+          />
+        ) : (
+          <PrivacyPolicyPage
+            onBackToStore={() => navigateTo("showcase")}
+            onGoToCart={() => navigateTo("cart")}
+            cartCount={totalBagItems}
           />
         )}
       </main>
@@ -296,50 +341,11 @@ export default function App() {
         addedToBag={addedToBag}
       />
 
-      {/* Editorial Footer (Restored exact original styling) */}
-      <footer className="border-t border-border bg-background py-16 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-          <div>
-            <div className="font-bold text-lg tracking-[0.3em] uppercase mb-2">
-              {BRAND_INFO.name}
-            </div>
-            <p className="text-xs text-muted-foreground max-w-md font-light leading-relaxed">
-              {BRAND_INFO.tagline} Curated beauty, jewellery and fashion gift boxes for life's lovely little moments.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-6 text-xs uppercase tracking-widest text-muted-foreground">
-            <button
-              onClick={scrollToTop}
-              className="flex items-center gap-1 text-foreground hover:opacity-75 transition-opacity font-bold cursor-pointer"
-            >
-              <span>Back to Top</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </button>
-            <span className="text-border">/</span>
-            <button
-              onClick={() => navigateTo(currentPage === "cart" ? "showcase" : "cart")}
-              className="hover:text-foreground transition-colors cursor-pointer"
-            >
-              {currentPage === "cart" ? "Gallery" : "Shopping Bag"}
-            </button>
-            <span className="text-border">/</span>
-            <span>&copy; {new Date().getFullYear()} All rights reserved</span>
-            <span className="text-border">/</span>
-            <span>
-              Developed by{" "}
-              <a
-                href="https://www.thekhubaib.me/"
-                target="_blank"
-                rel="noreferrer"
-                className="text-foreground font-semibold hover:underline transition-all"
-              >
-                Khubaib Shah
-              </a>
-            </span>
-          </div>
-        </div>
-      </footer>
+      {/* Sticky Curtain Reveal Luxury Footer */}
+      <StickyFooter
+        onNavigate={navigateTo}
+        onScrollToTop={scrollToTop}
+      />
     </div>
   )
 }
