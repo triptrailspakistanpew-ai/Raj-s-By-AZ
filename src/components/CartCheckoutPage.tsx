@@ -22,6 +22,7 @@ import {
   Store,
 } from "lucide-react"
 import { BRAND_INFO } from "@/src/data/products"
+import { AddToCartButton } from "@/src/components/ui/add-to-cart-button"
 
 export interface CartItem {
   id: string
@@ -128,7 +129,7 @@ export default function CartCheckoutPage({
 
   // Generate formatted WhatsApp message
   const generateWhatsAppUrl = () => {
-    let text = `🌸 *NEW ORDER REQUEST — RAJ'S BY AZ* 🌸\n`
+    let text = `📦 *NEW ORDER REQUEST — RAJ'S BY AZ* 📦\n`
     text += `_Little luxuries. Beautifully boxed._\n\n`
     text += `*Customer Information:*\n`
     text += `• Name: ${fullName.trim()}\n`
@@ -404,18 +405,21 @@ export default function CartCheckoutPage({
     <div className="min-h-screen bg-background text-foreground pb-24 animate-fade-in">
       {/* Header Bar */}
       <div className="border-b border-border/60 bg-background/90 backdrop-blur-md sticky top-16 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 flex items-center justify-between gap-2">
           <button
             onClick={onBackToStore}
-            className="flex items-center gap-2 text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 sm:gap-2 text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Return to Gift Boxes</span>
+            <ArrowLeft className="w-4 h-4 shrink-0" />
+            <span className="hidden sm:inline">Return to Gift Boxes</span>
+            <span className="sm:hidden text-xs">Back</span>
           </button>
-          <div className="flex items-center gap-2 text-[10px] uppercase font-mono tracking-widest text-muted-foreground">
-            <span>Raj's By AZ Checkout</span>
+          
+          <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs uppercase font-mono tracking-wider text-muted-foreground shrink-0">
+            <span className="text-foreground font-semibold hidden sm:inline">Raj's By AZ Checkout</span>
+            <span className="text-foreground font-semibold sm:hidden">Checkout</span>
             <span className="text-border">/</span>
-            <span>{cart.length} {cart.length === 1 ? "Box" : "Boxes"}</span>
+            <span className="px-2 py-0.5 rounded-full bg-muted/80 text-[10px] font-mono">{cart.length} {cart.length === 1 ? "Box" : "Boxes"}</span>
           </div>
         </div>
       </div>
@@ -1030,41 +1034,47 @@ export default function CartCheckoutPage({
                   </div>
                 </div>
 
-                {/* 4. Consent Checkbox */}
+                {/* 4. Consent Checkbox with Custom Animated SVG */}
                 <div className="pt-2">
-                  <label className="flex items-start gap-3 cursor-pointer text-xs text-muted-foreground">
-                    <input
-                      type="checkbox"
-                      checked={consentGiven}
-                      onChange={(e) => setConsentGiven(e.target.checked)}
-                      className="mt-0.5 rounded border-border text-primary focus:ring-primary w-4 h-4 cursor-pointer"
-                    />
-                    <span>
+                  <div className="flex items-start gap-3 text-xs text-muted-foreground">
+                    <div className="custom-checkbox-wrapper mt-0.5">
+                      <input
+                        type="checkbox"
+                        id="cbx-consent"
+                        checked={consentGiven}
+                        onChange={(e) => setConsentGiven(e.target.checked)}
+                      />
+                      <label htmlFor="cbx-consent" className="check">
+                        <svg width="18px" height="18px" viewBox="0 0 18 18">
+                          <path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z" />
+                          <polyline points="1 9 7 14 15 4" />
+                        </svg>
+                      </label>
+                    </div>
+                    <label htmlFor="cbx-consent" className="cursor-pointer select-none leading-relaxed">
                       I agree to share these order details with <strong>Raj's By AZ</strong> on WhatsApp to request order confirmation.
-                    </span>
-                  </label>
+                    </label>
+                  </div>
                   {formErrors.consent && (
                     <p className="text-[11px] text-destructive mt-1.5">{formErrors.consent}</p>
                   )}
                 </div>
 
-                {/* Primary CTA: Continue to WhatsApp */}
+                {/* Primary CTA: Place Order via WhatsApp */}
                 <div className="pt-4 border-t border-border space-y-3">
-                  <button
+                  <AddToCartButton
                     type="submit"
-                    disabled={isSubmitting}
-                    className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold uppercase tracking-[0.2em] rounded-full transition-all flex items-center justify-center gap-3 cursor-pointer shadow-lg disabled:opacity-50"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    <span>
-                      {isSubmitting
-                        ? "Preparing WhatsApp Order..."
-                        : `Continue to WhatsApp · Rs. ${subtotal.toLocaleString()}`}
-                    </span>
-                  </button>
+                    variant="whatsapp"
+                    controlledPhase={isSubmitting ? "loading" : "idle"}
+                    label={`Confirm & Place Order · Rs. ${subtotal.toLocaleString()}`}
+                    loadingLabel="Preparing Your Order..."
+                    addedLabel="Order Prepared!"
+                    icon={<MessageCircle className="w-4 h-4 shrink-0" />}
+                    className="w-full h-14 rounded-full text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg"
+                  />
 
                   <p className="text-center text-[11px] text-muted-foreground font-light">
-                    Your order details will open in WhatsApp. Please press <strong>Send</strong> to request confirmation.
+                    Your order details will open securely in WhatsApp. Tap <strong>Send</strong> to confirm with our concierge.
                   </p>
                 </div>
 

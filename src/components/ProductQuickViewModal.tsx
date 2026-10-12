@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react"
 import { GiftBoxProduct, BRAND_INFO } from "@/src/data/products"
-import { ShoppingBag, X, Check, ChevronDown } from "lucide-react"
+import { X, ChevronDown } from "lucide-react"
+import { AddToCartButton } from "@/src/components/ui/add-to-cart-button"
 
 interface ProductQuickViewModalProps {
   product: GiftBoxProduct | null
@@ -251,26 +252,13 @@ export default function ProductQuickViewModal({
 
           {/* Action Buttons Section */}
           <div className="pt-4 border-t border-border flex flex-col gap-2.5 pb-8 sm:pb-4">
-            <button
+            <AddToCartButton
+              label="Add to Bag"
+              loadingLabel="Adding to Bag..."
+              addedLabel="Added to Bag"
               onClick={onAddToCart}
-              className={`w-full h-12 rounded-full text-xs font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md active:scale-[0.99] ${
-                addedToBag
-                  ? "bg-emerald-600 text-white"
-                  : "bg-primary text-primary-foreground hover:bg-primary/90"
-              }`}
-            >
-              {addedToBag ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  <span>Added to Bag</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Add to Bag</span>
-                </>
-              )}
-            </button>
+              className="w-full h-12 rounded-full text-xs font-bold uppercase tracking-widest cursor-pointer shadow-md"
+            />
 
             <button
               onClick={onCheckout}

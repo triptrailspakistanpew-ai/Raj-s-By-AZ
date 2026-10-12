@@ -52,27 +52,26 @@ function MinimalProductCard({ product }: { product: GiftBoxProduct }) {
     <div
       ref={cardRef}
       onMouseEnter={handleMouseEnter}
-      onTouchStart={handleTouchStart}
       onMouseLeave={() => setActive(false)}
       className="group relative block w-full h-full bg-transparent overflow-hidden border border-border/30 hover:border-primary/50 transition-colors duration-700"
     >
       {/* Image Section */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-        {/* Background: Grayscale Image */}
+        {/* Background: Image (Full color on mobile, grayscale with reveal on desktop) */}
         {fullImageUrl && (
           <Image
             src={fullImageUrl}
             alt={product.title}
             fill
-            className="object-cover grayscale opacity-90 transition-all duration-1000 ease-out"
+            className="object-cover md:grayscale md:opacity-90 transition-all duration-1000 ease-out"
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         )}
 
-        {/* Foreground: Color Image (Clipped by circle) */}
+        {/* Foreground: Color Image (Desktop mouse reveal only) */}
         {fullImageUrl && (
           <div
-            className="absolute inset-0 w-full h-full transition-all duration-1000 ease-out"
+            className="hidden md:block absolute inset-0 w-full h-full transition-all duration-1000 ease-out"
             style={{
               clipPath: `circle(${
                 active ? "150%" : "0%"
@@ -90,12 +89,12 @@ function MinimalProductCard({ product }: { product: GiftBoxProduct }) {
           </div>
         )}
 
-        {/* Subtle dark gradient overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+        {/* Subtle dark gradient overlay on hover (desktop only) */}
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-        {/* Custom Hover Action */}
+        {/* Custom Hover Action (desktop only) */}
         <div
-          className={`absolute bottom-6 left-1/2 -translate-x-1/2 transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) z-30 w-fit ${
+          className={`hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) z-30 w-fit ${
             active
               ? "translate-y-0 opacity-100"
               : "translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
@@ -130,11 +129,11 @@ function MinimalProductCard({ product }: { product: GiftBoxProduct }) {
         </div>
       </div>
 
-      {/* Decorative Architectural Corners */}
-      <div className="absolute top-0 left-0 w-8 h-[1px] bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
-      <div className="absolute top-0 left-0 w-[1px] h-8 bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
-      <div className="absolute top-0 right-0 w-8 h-[1px] bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
-      <div className="absolute top-0 right-0 w-[1px] h-8 bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
+      {/* Decorative Architectural Corners (desktop only) */}
+      <div className="hidden md:block absolute top-0 left-0 w-8 h-[1px] bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
+      <div className="hidden md:block absolute top-0 left-0 w-[1px] h-8 bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
+      <div className="hidden md:block absolute top-0 right-0 w-8 h-[1px] bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
+      <div className="hidden md:block absolute top-0 right-0 w-[1px] h-8 bg-foreground/30 opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100"></div>
     </div>
   )
 }
@@ -564,8 +563,8 @@ export function Component() {
         id="final-collection"
         className="bg-transparent w-full pt-12 pb-4 md:pt-16 md:pb-6 border-t border-border"
       >
-        <div className="w-full max-w-7xl mx-auto px-2">
-          <div className="flex items-end justify-between border-b border-border pb-4 mb-8">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-border pb-4 mb-6 sm:mb-8 gap-3">
             <div>
               <span className="text-[10px] font-bold tracking-[0.2em] text-muted-foreground uppercase block mb-1">
                 OUR GIFT COLLECTION
@@ -576,22 +575,22 @@ export function Component() {
             </div>
             <Link
               href="#signature-spotlight"
-              className="group inline-flex items-center gap-1.5 text-xs font-bold uppercase text-foreground hover:text-muted-foreground transition-colors"
+              className="group inline-flex items-center gap-1.5 text-xs font-bold uppercase text-foreground hover:text-muted-foreground transition-colors shrink-0"
             >
               <span className="tracking-[0.2em]">{finalButtonText}</span>
               <ArrowDown className="w-3.5 h-3.5 transition-transform -rotate-90 group-hover:translate-x-0.5" />
             </Link>
           </div>
 
-          {/* Horizontal Scroll Container */}
+          {/* Horizontal Scroll Container: 1 full card and half card peeking on mobile */}
           <div
             ref={scrollContainerRef}
-            className="flex overflow-x-auto gap-4 md:gap-8 pb-8 no-scrollbar snap-x snap-mandatory justify-start md:justify-center"
+            className="flex overflow-x-auto gap-4 md:gap-8 pb-8 no-scrollbar snap-x snap-mandatory justify-start md:justify-center px-1 sm:px-0 scroll-pl-1 sm:scroll-pl-0"
           >
             {GIFT_BOX_PRODUCTS.map((product) => (
               <div
                 key={product.id}
-                className="anime-card grid-item group cursor-pointer w-[calc(50%-8px)] min-w-[calc(50%-8px)] max-w-[calc(50%-8px)] sm:w-[calc(33.333%-11px)] sm:min-w-[calc(33.333%-11px)] sm:max-w-[calc(33.333%-11px)] md:w-[300px] md:min-w-[300px] md:max-w-[320px] snap-center flex-shrink-0 opacity-0"
+                className="anime-card grid-item group cursor-pointer w-[72vw] min-w-[72vw] max-w-[72vw] sm:w-[calc(33.333%-11px)] sm:min-w-[calc(33.333%-11px)] sm:max-w-[calc(33.333%-11px)] md:w-[300px] md:min-w-[300px] md:max-w-[320px] snap-start sm:snap-center flex-shrink-0 opacity-0"
               >
                 <MinimalProductCard product={product} />
               </div>
@@ -634,7 +633,7 @@ export function Component() {
                   src={GIFT_BOX_PRODUCTS[1].thumbnail}
                   alt="Signature Beauty Box"
                   fill
-                  className="object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out"
+                  className="object-cover md:grayscale md:opacity-90 md:group-hover:grayscale-0 md:group-hover:opacity-100 transition-all duration-1000 ease-out"
                   sizes="(max-width: 768px) 100vw, 40vw"
                 />
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30">
@@ -752,12 +751,12 @@ export function Component() {
                     src={occ.image}
                     alt={occ.title}
                     fill
-                    className="object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 ease-out"
+                    className="object-cover md:grayscale md:opacity-90 md:group-hover:grayscale-0 md:group-hover:opacity-100 transition-all duration-1000 ease-out"
                     sizes="(max-width: 768px) 100vw, 33vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                  <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 z-30 w-fit">
+                  <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 z-30 w-fit">
                     <a
                       href="#final-collection"
                       className="block bg-background/80 backdrop-blur-md text-foreground text-[8px] sm:text-[10px] uppercase tracking-normal font-medium py-1.5 px-3 sm:py-3 sm:px-8 rounded-full border border-border whitespace-nowrap shadow-xl hover:bg-primary hover:text-primary-foreground transition-colors duration-300"
