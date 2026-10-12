@@ -56,6 +56,20 @@ export default function App() {
 
     const rafId = requestAnimationFrame(raf)
 
+    // Check initial URL pathname for deep-linked product (e.g. /products/signature-beauty-box)
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname
+      if (path.startsWith("/products/")) {
+        const handle = path.replace("/products/", "")
+        const initialProduct = GIFT_BOX_PRODUCTS.find((p) => p.handle === handle)
+        if (initialProduct) {
+          setActiveModalProduct(initialProduct)
+        }
+      } else if (path === "/cart" || path === "/checkout") {
+        setCurrentPage("cart")
+      }
+    }
+
     // Listen to custom quick view events from product buttons
     const handleQuickView = (event: Event) => {
       const customEvent = event as CustomEvent<{ handle: string }>
@@ -64,14 +78,34 @@ export default function App() {
       if (product) {
         setActiveModalProduct(product)
         setAddedToBag(false)
+        if (typeof window !== "undefined" && window.history?.pushState) {
+          window.history.pushState({ handle }, "", `/products/${product.handle}`)
+        }
+      }
+    }
+
+    const handlePopState = () => {
+      const path = window.location.pathname
+      if (path.startsWith("/products/")) {
+        const handle = path.replace("/products/", "")
+        const prod = GIFT_BOX_PRODUCTS.find((p) => p.handle === handle)
+        setActiveModalProduct(prod || null)
+      } else if (path === "/cart" || path === "/checkout") {
+        setCurrentPage("cart")
+        setActiveModalProduct(null)
+      } else {
+        setActiveModalProduct(null)
+        setCurrentPage("showcase")
       }
     }
 
     window.addEventListener("open-product-preview", handleQuickView)
+    window.addEventListener("popstate", handlePopState)
 
     return () => {
       cancelAnimationFrame(rafId)
       window.removeEventListener("open-product-preview", handleQuickView)
+      window.removeEventListener("popstate", handlePopState)
       lenis.destroy()
     }
   }, [])
@@ -247,7 +281,12 @@ export default function App() {
       {/* Quick View Drawer / Modal with collapsible sticky image and full smooth scrolling */}
       <ProductQuickViewModal
         product={activeModalProduct}
-        onClose={() => setActiveModalProduct(null)}
+        onClose={() => {
+          setActiveModalProduct(null)
+          if (typeof window !== "undefined" && window.location.pathname.startsWith("/products/")) {
+            window.history.pushState({}, "", currentPage === "cart" ? "/cart" : "/")
+          }
+        }}
         onAddToCart={handleAddToCartFromModal}
         onCheckout={() => {
           handleAddToCartFromModal()

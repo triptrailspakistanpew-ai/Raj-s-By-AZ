@@ -61,7 +61,7 @@ function MinimalProductCard({ product }: { product: GiftBoxProduct }) {
         {fullImageUrl && (
           <Image
             src={fullImageUrl}
-            alt={product.title}
+            alt={`${product.title} (${product.itemCount} Items) - Raj's By AZ`}
             fill
             className="object-cover md:grayscale md:opacity-90 transition-all duration-1000 ease-out"
             sizes="(max-width: 768px) 100vw, 33vw"
@@ -631,7 +631,7 @@ export function Component() {
               <div className="relative aspect-[3/4] w-full overflow-hidden border border-border/30 bg-muted">
                 <Image
                   src={GIFT_BOX_PRODUCTS[1].thumbnail}
-                  alt="Signature Beauty Box"
+                  alt="Signature Beauty Box (20 Items) - Curated Luxury Gift Box by Raj's By AZ"
                   fill
                   className="object-cover md:grayscale md:opacity-90 md:group-hover:grayscale-0 md:group-hover:opacity-100 transition-all duration-1000 ease-out"
                   sizes="(max-width: 768px) 100vw, 40vw"
@@ -749,7 +749,7 @@ export function Component() {
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
                   <Image
                     src={occ.image}
-                    alt={occ.title}
+                    alt={`${occ.title} - ${occ.tag} Gift Box by Raj's By AZ`}
                     fill
                     className="object-cover md:grayscale md:opacity-90 md:group-hover:grayscale-0 md:group-hover:opacity-100 transition-all duration-1000 ease-out"
                     sizes="(max-width: 768px) 100vw, 33vw"

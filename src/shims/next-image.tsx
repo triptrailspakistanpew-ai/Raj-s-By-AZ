@@ -12,7 +12,7 @@ export default function Image({
   src,
   alt,
   fill,
-  priority,
+  priority = false,
   sizes,
   className = "",
   style,
@@ -34,9 +34,10 @@ export default function Image({
   return (
     <img
       src={src}
-      alt={alt}
+      alt={alt || "Gift Box Collection by Raj's By AZ"}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
+      fetchPriority={priority ? "high" : "auto"}
       sizes={sizes}
       className={className}
       style={{

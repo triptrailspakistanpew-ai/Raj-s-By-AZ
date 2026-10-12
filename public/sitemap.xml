@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Homepage / Main Showcase -->
+  <url>
+    <loc>https://www.rajsbyaz.com/</loc>
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Signature Beauty Box - 20 Item Collection</image:title>
+      <image:caption>Curated beauty, makeup, jewellery and accessories gift box in Pakistan</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Mini Beauty Box (14 Items) -->
+  <url>
+    <loc>https://www.rajsbyaz.com/products/mini-beauty-box</loc>
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Mini Beauty Box - 14 Items</image:title>
+      <image:caption>Little treats and lovely surprises including makeup, jewellery and accessories</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Signature Beauty Box (20 Items) -->
+  <url>
+    <loc>https://www.rajsbyaz.com/products/signature-beauty-box</loc>
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Signature Beauty Box - 20 Items</image:title>
+      <image:caption>Twenty lovely beauty, jewellery and fashion favourites in one luxury gift box</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Premium Beauty Box (25 Items) -->
+  <url>
+    <loc>https://www.rajsbyaz.com/products/premium-beauty-box</loc>
+    <lastmod>2026-10-12</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&amp;fit=crop&amp;w=1200&amp;q=80</image:loc>
+      <image:title>Premium Beauty Box - 25 Items</image:title>
+      <image:caption>Full deluxe beauty and jewellery collection for extra-special gifting</image:caption>
+    </image:image>
+  </url>
+</urlset>

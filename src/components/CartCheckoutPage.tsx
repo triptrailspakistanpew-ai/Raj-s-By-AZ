@@ -503,7 +503,9 @@ export default function CartCheckoutPage({
                       <div className="w-20 sm:w-24 aspect-[3/4] bg-muted rounded-lg overflow-hidden border border-border flex-shrink-0 relative">
                         <img
                           src={item.thumbnail}
-                          alt={item.title}
+                          alt={`${item.title} - ${item.collection}`}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-full object-cover"
                         />
                       </div>

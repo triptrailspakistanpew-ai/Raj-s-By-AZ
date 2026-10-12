@@ -1,0 +1,9 @@
+# Robots.txt for Raj's By AZ
+# https://www.rajsbyaz.com/
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://www.rajsbyaz.com/sitemap.xml

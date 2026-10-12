@@ -134,7 +134,9 @@ export default function ProductQuickViewModal({
           {/* Background Product Image */}
           <img
             src={product.thumbnail}
-            alt={product.title}
+            alt={`${product.title} (${product.itemCount} Items) - Raj's By AZ Gift Box`}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none"
           />
 
