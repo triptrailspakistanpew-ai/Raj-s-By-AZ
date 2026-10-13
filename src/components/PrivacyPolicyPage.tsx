@@ -8,21 +8,12 @@ import {
   FileText,
   Sparkles,
   ArrowLeft,
-  ShoppingBag,
-  Printer,
-  Copy,
-  Check,
   MessageCircle,
   Truck,
   CreditCard,
   Database,
-  Trash2,
-  RefreshCw,
-  HelpCircle,
   ChevronDown,
   ChevronUp,
-  HeartHandshake,
-  ExternalLink,
   Gift,
   Clock,
   UserCheck,
@@ -57,39 +48,9 @@ const POLICY_SECTIONS: PolicySection[] = [
 
 export default function PrivacyPolicyPage({
   onBackToStore,
-  onGoToCart,
-  cartCount = 0,
 }: PrivacyPolicyPageProps) {
   const [activeSection, setActiveSection] = useState("discretion-manifesto")
-  const [copiedSummary, setCopiedSummary] = useState(false)
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
-
-  // Interactive Live Browser Privacy Inspector State
-  const [inspectorData, setInspectorData] = useState({
-    localStorageKeysCount: 0,
-    cartItemsCount: cartCount,
-    adTrackersCount: 0,
-    cookiesCount: 0,
-    lastChecked: "Just now",
-  })
-  const [purgeSuccess, setPurgeSuccess] = useState(false)
-
-  // Scan client-side storage for the privacy transparency inspector
-  useEffect(() => {
-    try {
-      const keysCount = typeof window !== "undefined" ? window.localStorage.length : 0
-      const cookiesArr = typeof document !== "undefined" && document.cookie ? document.cookie.split(";") : []
-      setInspectorData({
-        localStorageKeysCount: keysCount,
-        cartItemsCount: cartCount,
-        adTrackersCount: 0, // Zero commercial trackers on Raj's By AZ
-        cookiesCount: cookiesArr.filter((c) => c.trim().length > 0).length,
-        lastChecked: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-      })
-    } catch {
-      // Fallback
-    }
-  }, [cartCount])
 
   // Scrollspy for active policy section
   useEffect(() => {
@@ -119,41 +80,6 @@ export default function PrivacyPolicyPage({
       const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
       window.scrollTo({ top: y, behavior: "smooth" })
       setActiveSection(id)
-    }
-  }
-
-  const handlePrint = () => {
-    if (typeof window !== "undefined") {
-      window.print()
-    }
-  }
-
-  const handleCopySummary = () => {
-    const summary = `Raj's By AZ Privacy Promise:
-1. Surprise Inviolate: Recipients never receive price tags, invoices, or advance marketing alerts.
-2. Zero Data Selling: We never sell or share customer contact info with third-party ad networks.
-3. Sealed Gift Notes: Personal messages remain completely confidential.
-4. Ephemeral Receipts: Bank & Easypaisa slips purged post-fulfillment.
-Full Policy: https://www.rajsbyaz.com/privacy`
-
-    navigator.clipboard.writeText(summary)
-    setCopiedSummary(true)
-    setTimeout(() => setCopiedSummary(false), 2500)
-  }
-
-  const handlePurgeSession = () => {
-    try {
-      if (typeof window !== "undefined") {
-        window.sessionStorage.clear()
-        setPurgeSuccess(true)
-        setInspectorData((prev) => ({
-          ...prev,
-          lastChecked: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        }))
-        setTimeout(() => setPurgeSuccess(false), 3000)
-      }
-    } catch {
-      // Ignore
     }
   }
 
@@ -193,67 +119,28 @@ Full Policy: https://www.rajsbyaz.com/privacy`
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
-        {/* Navigation Action Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-8 border-b border-border/40">
+        {/* Navigation Action Bar - Clean back link only */}
+        <div className="flex items-center justify-between pb-8 border-b border-border/40">
           <button
             onClick={onBackToStore}
-            className="group inline-flex items-center gap-2 text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            className="group inline-flex items-center gap-2.5 text-xs uppercase tracking-[0.2em] font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
             <span>Return to Boutique Showcase</span>
           </button>
-
-          <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              onClick={handleCopySummary}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-border/60 rounded-full hover:bg-muted/50 hover:border-foreground/30 transition-all cursor-pointer"
-              title="Copy Discretion Principles"
-            >
-              {copiedSummary ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span className="text-emerald-700 font-medium">Copied to Clipboard</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5 text-muted-foreground" />
-                  <span>Copy Summary</span>
-                </>
-              )}
-            </button>
-
-            <button
-              onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border border-border/60 rounded-full hover:bg-muted/50 hover:border-foreground/30 transition-all cursor-pointer hidden sm:inline-flex"
-              title="Print Official Document"
-            >
-              <Printer className="w-3.5 h-3.5 text-muted-foreground" />
-              <span>Print Charter</span>
-            </button>
-
-            {onGoToCart && (
-              <button
-                onClick={onGoToCart}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium bg-primary text-primary-foreground rounded-full hover:opacity-90 transition-opacity cursor-pointer shadow-sm"
-              >
-                <ShoppingBag className="w-3.5 h-3.5" />
-                <span>Bag ({cartCount})</span>
-              </button>
-            )}
-          </div>
         </div>
 
         {/* Editorial Hero Section */}
         <div className="pt-12 pb-16 md:pt-16 md:pb-20">
           <div className="max-w-3xl space-y-4">
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground font-mono">
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground font-medium">
               <Sparkles className="w-3.5 h-3.5 text-[#E8C5A7]" />
               <span>Raj&apos;s By AZ Legal &amp; Trust Architecture</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground leading-[1.15]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light tracking-tight text-foreground leading-[1.15] uppercase">
               The Discretion Charter &amp; <br />
-              <span className="font-serif italic font-normal text-foreground">
+              <span className="font-normal text-foreground">
                 Privacy Protection Policy
               </span>
             </h1>
@@ -264,7 +151,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
               deserve the utmost discretion and uncompromising protection.
             </p>
 
-            <div className="flex flex-wrap items-center gap-y-2 gap-x-4 pt-4 text-xs text-muted-foreground font-mono">
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-4 pt-4 text-xs text-muted-foreground uppercase tracking-widest font-light">
               <span>Effective: October 2026</span>
               <span aria-hidden="true">·</span>
               <span>Document Version: 2.4</span>
@@ -325,108 +212,13 @@ Full Policy: https://www.rajsbyaz.com/privacy`
           </div>
         </div>
 
-        {/* Live Client-Side Privacy Inspector (Interactive Widget) */}
-        <div className="mb-16 p-6 sm:p-8 rounded-3xl border border-border/70 bg-gradient-to-br from-muted/30 via-background to-muted/20 relative overflow-hidden">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-xl">
-              <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-mono font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Live Browser Privacy Inspector</span>
-              </div>
-              <h3 className="text-lg sm:text-xl font-medium tracking-tight text-foreground">
-                Your Live Privacy Footprint on This Device
-              </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground font-light">
-                We believe in radial transparency. Here is the exact footprint this browser currently holds while visiting {BRAND_INFO.name}.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={handlePurgeSession}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium border border-destructive/40 text-destructive hover:bg-destructive/10 rounded-full transition-colors cursor-pointer"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Purge Session Cache</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setInspectorData((prev) => ({
-                    ...prev,
-                    lastChecked: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-                  }))
-                }}
-                className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-medium border border-border rounded-full hover:bg-muted/50 transition-colors cursor-pointer"
-              >
-                <RefreshCw className="w-3.5 h-3.5 text-muted-foreground" />
-                <span>Refresh Audit</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Audit Metrics Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border/50">
-            <div className="p-4 rounded-xl bg-card/60 border border-border/40">
-              <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block">
-                Local Shopping Bag Items
-              </span>
-              <span className="text-xl sm:text-2xl font-mono font-semibold text-foreground mt-1 block">
-                {inspectorData.cartItemsCount}
-              </span>
-              <span className="text-[11px] text-muted-foreground mt-0.5 block">Stored locally for checkout</span>
-            </div>
-
-            <div className="p-4 rounded-xl bg-card/60 border border-border/40">
-              <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block">
-                Third-Party Ad Trackers
-              </span>
-              <span className="text-xl sm:text-2xl font-mono font-semibold text-emerald-600 dark:text-emerald-400 mt-1 block">
-                0
-              </span>
-              <span className="text-[11px] text-muted-foreground mt-0.5 block">Zero Meta / Google ad pixels</span>
-            </div>
-
-            <div className="p-4 rounded-xl bg-card/60 border border-border/40">
-              <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block">
-                Browser Storage Keys
-              </span>
-              <span className="text-xl sm:text-2xl font-mono font-semibold text-foreground mt-1 block">
-                {inspectorData.localStorageKeysCount}
-              </span>
-              <span className="text-[11px] text-muted-foreground mt-0.5 block">Essential UI states only</span>
-            </div>
-
-            <div className="p-4 rounded-xl bg-card/60 border border-border/40">
-              <span className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground block">
-                Cross-Site Cookies
-              </span>
-              <span className="text-xl sm:text-2xl font-mono font-semibold text-foreground mt-1 block">
-                {inspectorData.cookiesCount}
-              </span>
-              <span className="text-[11px] text-muted-foreground mt-0.5 block">Zero tracking cookies</span>
-            </div>
-          </div>
-
-          {purgeSuccess && (
-            <motion.div
-              initial={{ opacity: 0, y: 6 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2"
-            >
-              <Check className="w-4 h-4 shrink-0" />
-              <span>Session storage successfully purged! Your temporary browser state has been reset cleanly.</span>
-            </motion.div>
-          )}
-        </div>
-
         {/* Main Content Layout: Sticky Table of Contents + Comprehensive Policy Details */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column: Sticky Section Navigation */}
           <aside className="lg:col-span-4">
             <div className="lg:sticky lg:top-24 space-y-6">
               <div className="p-6 rounded-2xl border border-border/60 bg-card/50 backdrop-blur-md">
-                <span className="text-xs uppercase font-mono tracking-widest text-muted-foreground block mb-4">
+                <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground block mb-4 font-medium">
                   Charter Navigation
                 </span>
 
@@ -449,7 +241,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                           <Icon className="w-3.5 h-3.5 shrink-0" />
                           <span className="truncate">{sec.title}</span>
                         </div>
-                        <span className="text-[10px] font-mono opacity-70 shrink-0 ml-2">
+                        <span className="text-[10px] tracking-wider opacity-70 shrink-0 ml-2">
                           {sec.number}
                         </span>
                       </button>
@@ -464,7 +256,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                   <div className="w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-600 flex items-center justify-center">
                     <MessageCircle className="w-4 h-4" />
                   </div>
-                  <span className="text-xs font-medium uppercase tracking-wider text-foreground">
+                  <span className="text-xs font-medium uppercase tracking-[0.15em] text-foreground">
                     Data Concierge Desk
                   </span>
                 </div>
@@ -475,7 +267,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                   href={`https://wa.me/${BRAND_INFO.whatsappInternational}?text=Hi%20Raj%27s%20By%20AZ%20Privacy%20Desk%2C%20I%20have%20an%20inquiry%20regarding%20my%20data%20discretion.`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-semibold rounded-xl bg-foreground text-background hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 text-xs font-semibold uppercase tracking-wider rounded-xl bg-foreground text-background hover:opacity-90 transition-opacity"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
                   <span>WhatsApp: {BRAND_INFO.whatsappNumber}</span>
@@ -488,12 +280,12 @@ Full Policy: https://www.rajsbyaz.com/privacy`
           <div className="lg:col-span-8 space-y-16">
             {/* Section 01: Manifesto */}
             <section id="discretion-manifesto" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Section 01</span>
                 <span aria-hidden="true">·</span>
                 <span>Philosophy</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 The Gifting Discretion Manifesto
               </h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground text-sm sm:text-base font-light leading-relaxed space-y-4">
@@ -510,10 +302,10 @@ Full Policy: https://www.rajsbyaz.com/privacy`
               </div>
 
               <div className="p-5 rounded-2xl bg-muted/30 border-l-2 border-foreground/80 space-y-1">
-                <span className="text-xs uppercase tracking-wider font-mono text-foreground font-semibold block">
+                <span className="text-xs uppercase tracking-wider text-foreground font-semibold block">
                   The Golden Rule of Gifting Discretion
                 </span>
-                <p className="text-xs sm:text-sm text-muted-foreground font-light leading-relaxed italic">
+                <p className="text-xs sm:text-sm text-muted-foreground font-light leading-relaxed">
                   &ldquo;A gift must delight the recipient without burdening them with costs, commercial solicitations, or breached expectations.&rdquo;
                 </p>
               </div>
@@ -521,12 +313,12 @@ Full Policy: https://www.rajsbyaz.com/privacy`
 
             {/* Section 02: Information We Collect */}
             <section id="data-collection" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Section 02</span>
                 <span aria-hidden="true">·</span>
                 <span>Data Classification</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 Information We Collect &amp; Store
               </h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground text-sm sm:text-base font-light leading-relaxed space-y-4">
@@ -566,12 +358,12 @@ Full Policy: https://www.rajsbyaz.com/privacy`
 
             {/* Section 03: Purpose & Usage */}
             <section id="purpose-usage" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Section 03</span>
                 <span aria-hidden="true">·</span>
                 <span>Operational Use</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 How We Use Your Personal Details
               </h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground text-sm sm:text-base font-light leading-relaxed space-y-4">
@@ -580,36 +372,36 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                 </p>
                 <div className="space-y-3 pt-2">
                   <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs font-mono shrink-0 mt-0.5">
+                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium shrink-0 mt-0.5">
                       ✓
                     </div>
                     <div>
                       <strong className="text-foreground font-medium block">Order Preparation &amp; Unboxing Styling:</strong>
-                      <span className="text-xs sm:text-sm text-muted-foreground">
+                      <span className="text-xs sm:text-sm text-muted-foreground font-light">
                         Matching the chosen collection (Mini 14-item, Signature 20-item, or Premium 25-item) with your chosen color ribbon, handwritten card, and safety packaging.
                       </span>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs font-mono shrink-0 mt-0.5">
+                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium shrink-0 mt-0.5">
                       ✓
                     </div>
                     <div>
                       <strong className="text-foreground font-medium block">Nationwide Courier Dispatch &amp; Tracking:</strong>
-                      <span className="text-xs sm:text-sm text-muted-foreground">
+                      <span className="text-xs sm:text-sm text-muted-foreground font-light">
                         Generating computer-printed shipping manifests for reliable courier services (e.g., TCS, Leopard, PostEx, Trax) to reach addresses nationwide.
                       </span>
                     </div>
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs font-mono shrink-0 mt-0.5">
+                    <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs font-medium shrink-0 mt-0.5">
                       ✓
                     </div>
                     <div>
                       <strong className="text-foreground font-medium block">WhatsApp Order Concierge:</strong>
-                      <span className="text-xs sm:text-sm text-muted-foreground">
+                      <span className="text-xs sm:text-sm text-muted-foreground font-light">
                         Communicating directly with the buyer to provide real-time tracking numbers, unboxing photos prior to dispatch, and immediate replacement assistance if any item is damaged during transit.
                       </span>
                     </div>
@@ -620,12 +412,12 @@ Full Policy: https://www.rajsbyaz.com/privacy`
 
             {/* Section 04: Surprise Protection */}
             <section id="surprise-protection" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Section 04</span>
                 <span aria-hidden="true">·</span>
                 <span>The Surprise Protocol</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 Surprise Deliveries &amp; Recipient Privacy
               </h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground text-sm sm:text-base font-light leading-relaxed space-y-4">
@@ -634,7 +426,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                   <div className="p-4 rounded-xl border border-border/50 bg-card/30 space-y-1.5">
-                    <span className="text-xs font-medium text-foreground block">
+                    <span className="text-xs font-medium text-foreground block uppercase tracking-wider">
                       Discreet Outer Packaging
                     </span>
                     <p className="text-xs text-muted-foreground font-light leading-relaxed">
@@ -643,7 +435,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                   </div>
 
                   <div className="p-4 rounded-xl border border-border/50 bg-card/30 space-y-1.5">
-                    <span className="text-xs font-medium text-foreground block">
+                    <span className="text-xs font-medium text-foreground block uppercase tracking-wider">
                       Zero In-Box Price Tags
                     </span>
                     <p className="text-xs text-muted-foreground font-light leading-relaxed">
@@ -652,7 +444,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                   </div>
 
                   <div className="p-4 rounded-xl border border-border/50 bg-card/30 space-y-1.5">
-                    <span className="text-xs font-medium text-foreground block">
+                    <span className="text-xs font-medium text-foreground block uppercase tracking-wider">
                       Optional Anonymous Gifting
                     </span>
                     <p className="text-xs text-muted-foreground font-light leading-relaxed">
@@ -661,7 +453,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                   </div>
 
                   <div className="p-4 rounded-xl border border-border/50 bg-card/30 space-y-1.5">
-                    <span className="text-xs font-medium text-foreground block">
+                    <span className="text-xs font-medium text-foreground block uppercase tracking-wider">
                       Zero Pre-Delivery Spoilers
                     </span>
                     <p className="text-xs text-muted-foreground font-light leading-relaxed">
@@ -674,12 +466,12 @@ Full Policy: https://www.rajsbyaz.com/privacy`
 
             {/* Section 05: Payments & Financial Confidentiality */}
             <section id="payment-security" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Section 05</span>
                 <span aria-hidden="true">·</span>
                 <span>Financial Safety</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 Payments &amp; Financial Confidentiality
               </h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground text-sm sm:text-base font-light leading-relaxed space-y-4">
@@ -701,7 +493,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                       2. Easypaisa / Bank Transfer Online
                     </h3>
                     <p className="text-xs text-muted-foreground font-light leading-relaxed">
-                      When transferring to our registered title (Syed Khubaib Ali Shah), your transfer screenshots or transaction reference IDs (TRX) are verified strictly by authorized personnel. We never request your PIN, OTP, CVV, or banking passwords.
+                      When transferring to our registered title ({BRAND_INFO.easypaisaTitle}), your transfer screenshots or transaction reference IDs (TRX) are verified strictly by authorized personnel. We never request your PIN, OTP, CVV, or banking passwords.
                     </p>
                   </div>
 
@@ -719,12 +511,12 @@ Full Policy: https://www.rajsbyaz.com/privacy`
 
             {/* Section 06: Logistics & Couriers */}
             <section id="logistics-couriers" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Section 06</span>
                 <span aria-hidden="true">·</span>
                 <span>Logistics Partners</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 Nationwide Courier Handover
               </h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground text-sm sm:text-base font-light leading-relaxed space-y-4">
@@ -747,12 +539,12 @@ Full Policy: https://www.rajsbyaz.com/privacy`
 
             {/* Section 07: Storage & Retention */}
             <section id="storage-retention" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Section 07</span>
                 <span aria-hidden="true">·</span>
                 <span>Data Retention</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 Data Retention &amp; Storage Lifespans
               </h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground text-sm sm:text-base font-light leading-relaxed space-y-4">
@@ -761,33 +553,33 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                 </p>
                 <div className="overflow-x-auto pt-2">
                   <table className="w-full text-left text-xs border border-border/60 rounded-xl overflow-hidden">
-                    <thead className="bg-muted/40 text-foreground font-mono uppercase">
+                    <thead className="bg-muted/40 text-foreground uppercase tracking-wider">
                       <tr>
-                        <th className="p-3 border-b border-border/60">Data Category</th>
-                        <th className="p-3 border-b border-border/60">Retention Period</th>
-                        <th className="p-3 border-b border-border/60">Action Upon Expiry</th>
+                        <th className="p-3 border-b border-border/60 font-medium">Data Category</th>
+                        <th className="p-3 border-b border-border/60 font-medium">Retention Period</th>
+                        <th className="p-3 border-b border-border/60 font-medium">Action Upon Expiry</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/40 text-muted-foreground font-light">
                       <tr>
                         <td className="p-3 font-medium text-foreground">Payment Slips &amp; TRX Screenshots</td>
                         <td className="p-3">30 Days after fulfilled delivery</td>
-                        <td className="p-3 text-emerald-600 dark:text-emerald-400">Permanently Deleted</td>
+                        <td className="p-3 text-emerald-600 dark:text-emerald-400 font-medium">Permanently Deleted</td>
                       </tr>
                       <tr>
                         <td className="p-3 font-medium text-foreground">Custom Gift Message Notes</td>
                         <td className="p-3">14 Days after unboxing date</td>
-                        <td className="p-3 text-emerald-600 dark:text-emerald-400">Purged from Print Cache</td>
+                        <td className="p-3 text-emerald-600 dark:text-emerald-400 font-medium">Purged from Print Cache</td>
                       </tr>
                       <tr>
                         <td className="p-3 font-medium text-foreground">Courier Consignment Logs</td>
                         <td className="p-3">90 Days (tax &amp; audit compliance)</td>
-                        <td className="p-3 text-emerald-600 dark:text-emerald-400">Anonymized Archive</td>
+                        <td className="p-3 text-emerald-600 dark:text-emerald-400 font-medium">Anonymized Archive</td>
                       </tr>
                       <tr>
                         <td className="p-3 font-medium text-foreground">Browser Cart &amp; UI Sessions</td>
                         <td className="p-3">Local Device / Session only</td>
-                        <td className="p-3 text-emerald-600 dark:text-emerald-400">User Cleared or Browser Reset</td>
+                        <td className="p-3 text-emerald-600 dark:text-emerald-400 font-medium">User Cleared or Browser Reset</td>
                       </tr>
                     </tbody>
                   </table>
@@ -797,12 +589,12 @@ Full Policy: https://www.rajsbyaz.com/privacy`
 
             {/* Section 08: Your Rights & Erasure */}
             <section id="your-rights" className="scroll-mt-24 space-y-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Section 08</span>
                 <span aria-hidden="true">·</span>
                 <span>User Empowerment</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 Your Rights &amp; Immediate Erasure Requests
               </h2>
               <div className="prose prose-neutral dark:prose-invert max-w-none text-muted-foreground text-sm sm:text-base font-light leading-relaxed space-y-4">
@@ -811,7 +603,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
                   <div className="p-4 rounded-xl border border-border/50 bg-card/30 space-y-1">
-                    <span className="text-xs font-semibold text-foreground block">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-foreground block">
                       Right to Access
                     </span>
                     <p className="text-[11px] text-muted-foreground font-light leading-relaxed">
@@ -820,7 +612,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                   </div>
 
                   <div className="p-4 rounded-xl border border-border/50 bg-card/30 space-y-1">
-                    <span className="text-xs font-semibold text-foreground block">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-foreground block">
                       Right to Correction
                     </span>
                     <p className="text-[11px] text-muted-foreground font-light leading-relaxed">
@@ -829,8 +621,8 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                   </div>
 
                   <div className="p-4 rounded-xl border border-border/50 bg-card/30 space-y-1">
-                    <span className="text-xs font-semibold text-foreground block">
-                      Right to Erasure (&ldquo;To Be Forgotten&rdquo;)
+                    <span className="text-xs font-semibold uppercase tracking-wider text-foreground block">
+                      Right to Erasure
                     </span>
                     <p className="text-[11px] text-muted-foreground font-light leading-relaxed">
                       Instruct our team to purge past delivery addresses and contact logs from our operational systems at any time.
@@ -842,10 +634,10 @@ Full Policy: https://www.rajsbyaz.com/privacy`
 
             {/* Section 09: FAQ Accordion */}
             <section className="space-y-6 pt-4">
-              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#E8C5A7]">
+              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#E8C5A7] font-medium">
                 <span>Transparency FAQ</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground">
+              <h2 className="text-2xl sm:text-3xl font-light tracking-tight text-foreground uppercase">
                 Common Discretion Scenarios
               </h2>
 
@@ -886,10 +678,10 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                   <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-medium tracking-tight text-foreground">
+                  <h3 className="text-lg font-medium tracking-tight text-foreground uppercase">
                     Raj&apos;s By AZ Privacy &amp; Trust Desk
                   </h3>
-                  <span className="text-xs text-muted-foreground font-mono">
+                  <span className="text-xs text-muted-foreground uppercase tracking-wider block">
                     Direct Concierge Support for Data &amp; Order Inquiries
                   </span>
                 </div>
@@ -899,9 +691,9 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                 If you have questions regarding this Discretion Charter, wish to request immediate record removal, or need assistance ensuring your surprise gift remains confidential, please contact our team:
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div className="p-4 rounded-xl bg-background border border-border/50">
-                  <span className="text-muted-foreground uppercase text-[10px] block">WhatsApp Concierge</span>
+                  <span className="text-muted-foreground uppercase text-[10px] tracking-wider block">WhatsApp Concierge</span>
                   <a
                     href={`https://wa.me/${BRAND_INFO.whatsappInternational}`}
                     target="_blank"
@@ -914,7 +706,7 @@ Full Policy: https://www.rajsbyaz.com/privacy`
                 </div>
 
                 <div className="p-4 rounded-xl bg-background border border-border/50">
-                  <span className="text-muted-foreground uppercase text-[10px] block">Finance &amp; Management Title</span>
+                  <span className="text-muted-foreground uppercase text-[10px] tracking-wider block">Finance &amp; Management Title</span>
                   <span className="text-foreground font-semibold mt-1 block">
                     {BRAND_INFO.easypaisaTitle}
                   </span>
@@ -925,17 +717,17 @@ Full Policy: https://www.rajsbyaz.com/privacy`
               {/* Personal Founder Note */}
               <div className="pt-4 border-t border-border/50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="space-y-0.5">
-                  <p className="text-xs italic font-serif text-foreground">
+                  <p className="text-xs font-light text-foreground">
                     &ldquo;Little luxuries, guarded with the care of true friendship.&rdquo;
                   </p>
-                  <span className="text-[11px] text-muted-foreground font-mono block">
+                  <span className="text-[11px] text-muted-foreground uppercase tracking-wider block">
                     The Raj&apos;s By AZ Creative &amp; Logistics Team
                   </span>
                 </div>
 
                 <button
                   onClick={onBackToStore}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold rounded-full bg-foreground text-background hover:opacity-90 transition-opacity cursor-pointer shadow-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider rounded-full bg-foreground text-background hover:opacity-90 transition-opacity cursor-pointer shadow-sm"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back to Gift Collections</span>

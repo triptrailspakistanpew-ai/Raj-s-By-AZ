@@ -128,24 +128,27 @@ export function VisageHeroSection({
           </div>
         </div>
 
-        {/* Mobile Top Image Container (Screenshot 2) */}
-        <div className="block lg:hidden w-full h-[360px] sm:h-[420px] relative overflow-hidden">
-          <img
-            src={modelImage}
-            alt="Curated Beauty Gift Box - Raj's By AZ"
-            className="w-full h-full object-cover object-center"
-            style={{
-              transform: `scale(${loaded ? 1 : 1.18}) translateY(${scrollY * 0.12}px)`,
-              transition: loaded
-                ? "transform 1.35s cubic-bezier(0.16, 1, 0.3, 1)"
-                : "none",
-              willChange: "transform",
-            }}
-            loading="eager"
-          />
+        {/* Mobile Top Image Container (Visible overflow so badge is never clipped) */}
+        <div className="block lg:hidden w-full relative">
+          {/* Inner image container with overflow-hidden for smooth parallax zooming */}
+          <div className="w-full h-[360px] sm:h-[420px] relative overflow-hidden">
+            <img
+              src={modelImage}
+              alt="Curated Beauty Gift Box - Raj's By AZ"
+              className="w-full h-full object-cover object-center"
+              style={{
+                transform: `scale(${loaded ? 1 : 1.18}) translateY(${scrollY * 0.12}px)`,
+                transition: loaded
+                  ? "transform 1.35s cubic-bezier(0.16, 1, 0.3, 1)"
+                  : "none",
+                willChange: "transform",
+              }}
+              loading="eager"
+            />
+          </div>
 
-          {/* Mobile Arc Wrap Circular Rotating Badge (Centered at the bottom of the image) */}
-          <div className="flex lg:hidden absolute top-[100%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#161311] text-[#FFB68B] shadow-2xl items-center justify-center p-2 select-none border border-[#FFB68B]/30">
+          {/* Mobile Arc Wrap Circular Rotating Badge (Centered right across the bottom seam of the image, 100% visible) */}
+          <div className="flex lg:hidden absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 z-30 w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#161311] text-[#FFB68B] shadow-2xl items-center justify-center p-2 select-none border border-[#FFB68B]/30">
             <svg className="w-full h-full animate-spin-slow" viewBox="0 0 100 100">
               <path
                 id="visageCirclePathMobile"
@@ -179,7 +182,7 @@ export function VisageHeroSection({
         */}
         <div className="max-w-[1240px] xl:max-w-[1280px] mx-auto px-6 sm:px-10 lg:px-12 w-full h-full flex items-center relative z-10 pointer-events-none">
           <div
-            className="w-full lg:w-1/2 h-full flex flex-col justify-center lg:pr-8 xl:pr-12 pt-14 pb-12 lg:py-0 pointer-events-auto"
+            className="w-full lg:w-1/2 h-full flex flex-col justify-center lg:pr-8 xl:pr-12 pt-16 sm:pt-20 pb-12 lg:py-0 pointer-events-auto"
             style={{
               opacity: loaded ? 1 : 0,
               transform: loaded ? "translateY(0px)" : "translateY(36px)",
