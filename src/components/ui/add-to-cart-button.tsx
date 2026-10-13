@@ -35,7 +35,7 @@ const ICON_LAYER =
 
 // Labels stack in one grid cell; outgoing fades out, incoming fades in after.
 const LABEL_LAYER =
-  "col-start-1 row-start-1 text-center transition-opacity ease-out motion-reduce:transition-none";
+  "col-start-1 row-start-1 text-center whitespace-nowrap transition-opacity ease-out motion-reduce:transition-none";
 
 /**
  * Reusable luxury tactile button component.

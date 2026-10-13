@@ -427,13 +427,25 @@ export default function CartCheckoutPage({
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-16">
-        <div className="mb-8">
-          <span className="text-[10px] font-mono tracking-[0.3em] uppercase text-muted-foreground block mb-1">
-            Raj's By AZ &bull; Little luxuries. Beautifully boxed.
-          </span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">
-            Your Gift Bag
-          </h1>
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <span className="hidden sm:block text-[10px] font-mono tracking-[0.3em] uppercase text-muted-foreground mb-1">
+              Raj's By AZ &bull; Little luxuries. Beautifully boxed.
+            </span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight uppercase">
+              Your Gift Bag
+            </h1>
+          </div>
+          {cart.length > 0 && (
+            <button
+              onClick={onBackToStore}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-border hover:border-foreground/50 bg-card text-[11px] sm:text-xs uppercase font-mono tracking-wider font-medium text-foreground hover:bg-muted/40 transition-all cursor-pointer shrink-0 shadow-sm"
+              title="Add another gift box from our collection"
+            >
+              <Plus className="w-3.5 h-3.5 text-primary" />
+              <span>Add Another Bag</span>
+            </button>
+          )}
         </div>
 
         {cart.length === 0 ? (
@@ -471,9 +483,9 @@ export default function CartCheckoutPage({
             {/* LEFT COLUMN: Cart Items & Summary (5 cols) - Sticky with smooth contained scrolling */}
             <div
               data-lenis-prevent="true"
-              className="lg:col-span-5 space-y-6 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto overscroll-contain pr-1"
+              className="lg:col-span-5 space-y-6 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto overscroll-contain pr-1 no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
-              <div className="border border-border bg-card rounded-2xl p-6 shadow-sm">
+              <div className="border border-border bg-card rounded-2xl p-4 sm:p-6 shadow-sm">
                 <div className="flex items-center justify-between pb-4 border-b border-border mb-6">
                   <div>
                     <h2 className="text-sm font-bold uppercase tracking-wider">
@@ -487,20 +499,22 @@ export default function CartCheckoutPage({
                   </div>
                   <button
                     onClick={onAddSampleItem}
-                    className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                    className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground hover:text-foreground transition-colors cursor-pointer flex items-center gap-1"
+                    title="Add another bag to your gift order"
                   >
-                    + Add Another Box
+                    <Plus className="w-3 h-3 text-primary" />
+                    <span>Add Another Bag</span>
                   </button>
                 </div>
 
-                {/* Items List - fully scrollable with data-lenis-prevent and native styled scrollbar */}
+                {/* Items List - fully scrollable without visible scrollbars */}
                 <div
                   data-lenis-prevent="true"
                   tabIndex={0}
-                  className="space-y-6 divide-y divide-border/50 max-h-[380px] sm:max-h-[440px] overflow-y-auto overscroll-contain pr-2 focus:outline-none"
+                  className="space-y-6 max-h-[380px] sm:max-h-[440px] overflow-y-auto overscroll-contain pr-1 focus:outline-none no-scrollbar [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 >
                   {cart.map((item) => (
-                    <div key={item.id} className="pt-6 first:pt-0 flex gap-4">
+                    <div key={item.id} className="flex gap-4">
                       {/* Thumbnail */}
                       <div className="w-20 sm:w-24 aspect-[3/4] bg-muted rounded-lg overflow-hidden border border-border flex-shrink-0 relative">
                         <img
@@ -526,7 +540,7 @@ export default function CartCheckoutPage({
                             </div>
                             <button
                               onClick={() => onRemoveItem(item.id)}
-                              className="text-muted-foreground hover:text-destructive transition-colors p-1"
+                              className="text-muted-foreground hover:text-destructive transition-colors p-1 cursor-pointer"
                               title="Remove box"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -539,7 +553,7 @@ export default function CartCheckoutPage({
                         </div>
 
                         {/* Quantity Stepper & Price */}
-                        <div className="flex items-center justify-between pt-3 mt-2 border-t border-border/40">
+                        <div className="flex items-center justify-between pt-2 mt-2">
                           <div className="flex items-center border border-border rounded-full bg-background">
                             <button
                               onClick={() => onUpdateQuantity(item.id, -1)}
@@ -569,6 +583,18 @@ export default function CartCheckoutPage({
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Add Another Bag Action */}
+                <div className="pt-4 border-t border-border/40">
+                  <button
+                    onClick={onBackToStore}
+                    className="w-full py-2.5 px-4 rounded-xl border border-dashed border-border hover:border-primary/50 text-xs uppercase font-mono tracking-wider text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2 cursor-pointer bg-muted/20"
+                    title="Browse our collection to add another gift bag"
+                  >
+                    <Plus className="w-3.5 h-3.5 text-primary" />
+                    <span>Add Another Bag</span>
+                  </button>
                 </div>
 
                 {/* Pricing Summary */}
@@ -628,12 +654,12 @@ export default function CartCheckoutPage({
 
             {/* RIGHT COLUMN: Checkout Form (7 cols) */}
             <div className="lg:col-span-7">
-              <form onSubmit={handleProceedToWhatsApp} className="border border-border bg-card rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
+              <form onSubmit={handleProceedToWhatsApp} className="border border-border bg-card rounded-2xl p-4 sm:p-6 md:p-8 shadow-sm space-y-6 sm:space-y-8">
                 
                 {/* Heading */}
                 <div>
                   <h2 className="text-xl sm:text-2xl font-bold uppercase tracking-tight mb-1">
-                    Almost ready to make someone's day.
+                    Almost ready to gift.
                   </h2>
                   <p className="text-xs text-muted-foreground font-light">
                     Just a few details and your lovely gift will be on its way to confirmation.
@@ -642,7 +668,7 @@ export default function CartCheckoutPage({
 
                 {/* 1. Customer Information */}
                 <div>
-                  <div className="flex items-center gap-2 pb-3 border-b border-border mb-6">
+                  <div className="flex items-center gap-2 pb-3 border-b border-border mb-4 sm:mb-6">
                     <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-mono font-bold flex items-center justify-center">
                       1
                     </span>
@@ -662,7 +688,7 @@ export default function CartCheckoutPage({
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="e.g. Ayesha Khan"
-                        className={`w-full px-4 py-2.5 rounded-lg border bg-background text-sm font-light focus:outline-none focus:ring-1 focus:ring-primary transition-colors ${
+                        className={`w-full px-3.5 sm:px-4 py-2.5 rounded-lg border bg-background text-sm font-light focus:outline-none focus:ring-1 focus:ring-primary transition-colors ${
                           formErrors.fullName ? "border-destructive" : "border-border"
                         }`}
                       />
@@ -681,7 +707,7 @@ export default function CartCheckoutPage({
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         placeholder="0300 1234567"
-                        className={`w-full px-4 py-2.5 rounded-lg border bg-background text-sm font-mono focus:outline-none focus:ring-1 focus:ring-primary transition-colors ${
+                        className={`w-full px-3.5 sm:px-4 py-2.5 rounded-lg border bg-background text-sm font-mono focus:outline-none focus:ring-1 focus:ring-primary transition-colors ${
                           formErrors.phoneNumber ? "border-destructive" : "border-border"
                         }`}
                       />
@@ -700,7 +726,7 @@ export default function CartCheckoutPage({
                         value={altPhoneNumber}
                         onChange={(e) => setAltPhoneNumber(e.target.value)}
                         placeholder="0312 9876543"
-                        className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-sm font-mono focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                        className="w-full px-3.5 sm:px-4 py-2.5 rounded-lg border border-border bg-background text-sm font-mono focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
                       />
                     </div>
 
@@ -713,7 +739,7 @@ export default function CartCheckoutPage({
                         <select
                           value={city}
                           onChange={(e) => setCity(e.target.value)}
-                          className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary transition-colors cursor-pointer"
+                          className="w-full px-3.5 sm:px-4 py-2.5 rounded-lg border border-border bg-background text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary transition-colors cursor-pointer"
                         >
                           <option value="Karachi">Karachi</option>
                           <option value="Lahore">Lahore</option>
@@ -746,8 +772,8 @@ export default function CartCheckoutPage({
                               : "border-border bg-background text-muted-foreground"
                           }`}
                         >
-                          <Home className="w-3.5 h-3.5" />
-                          <span>Home Delivery</span>
+                          <Home className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">Home Delivery</span>
                         </button>
                         <button
                           type="button"
@@ -758,8 +784,8 @@ export default function CartCheckoutPage({
                               : "border-border bg-background text-muted-foreground"
                           }`}
                         >
-                          <Store className="w-3.5 h-3.5" />
-                          <span>Self Pickup</span>
+                          <Store className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">Self Pickup</span>
                         </button>
                       </div>
                     </div>
@@ -775,7 +801,7 @@ export default function CartCheckoutPage({
                           value={address}
                           onChange={(e) => setAddress(e.target.value)}
                           placeholder="House / Apartment #, Street, Block, Phase or Area"
-                          className={`w-full px-4 py-2.5 rounded-lg border bg-background text-sm font-light focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none ${
+                          className={`w-full px-3.5 sm:px-4 py-2.5 rounded-lg border bg-background text-sm font-light focus:outline-none focus:ring-1 focus:ring-primary transition-colors resize-none ${
                             formErrors.address ? "border-destructive" : "border-border"
                           }`}
                         />
@@ -789,7 +815,7 @@ export default function CartCheckoutPage({
 
                 {/* 2. Payment Selection */}
                 <div>
-                  <div className="flex items-center gap-2 pb-3 border-b border-border mb-6">
+                  <div className="flex items-center gap-2 pb-3 border-b border-border mb-4 sm:mb-6">
                     <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-mono font-bold flex items-center justify-center">
                       2
                     </span>
@@ -800,7 +826,7 @@ export default function CartCheckoutPage({
 
                   {deliveryMethod === "pickup" ? (
                     /* Self Pickup Payment View - No COD or Bank Transfer shown */
-                    <div className="rounded-xl border border-primary/20 bg-primary/5 p-5 space-y-4 animate-fade-in">
+                    <div className="rounded-xl border border-primary/20 bg-primary/5 p-4 sm:p-5 space-y-4 animate-fade-in">
                       <div className="flex items-start gap-3.5">
                         <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0 mt-0.5">
                           <Store className="w-5 h-5" />
@@ -810,7 +836,7 @@ export default function CartCheckoutPage({
                             Pay at Self Pickup (In-Person Collection)
                           </h4>
                           <p className="text-xs text-muted-foreground font-light leading-relaxed mt-1">
-                            You can pick up your beautifully packaged gift box directly from our Karachi pickup point. Timings will be shared on WhatsApp.You can pay directly in cash or instant transfer when collecting your gift box.
+                            You can pick up your beautifully packaged gift box directly from our Karachi pickup point. Timings will be shared on WhatsApp. You can pay directly in cash or instant transfer when collecting your gift box.
                           </p>
                         </div>
                       </div>
@@ -830,23 +856,23 @@ export default function CartCheckoutPage({
                   ) : (
                     /* Home Delivery Payment Methods: COD & Bank Transfer / Easypaisa */
                     <>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-5 sm:mb-6">
                         {/* COD */}
                         <div
                           onClick={() => setPaymentMethod("cod")}
-                          className={`p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+                          className={`p-3.5 sm:p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
                             paymentMethod === "cod"
                               ? "border-primary bg-primary/5 ring-1 ring-primary"
                               : "border-border hover:border-primary/50 bg-background"
                           }`}
                         >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <Banknote className="w-4 h-4 text-primary" />
-                              <span className="text-xs font-bold uppercase tracking-wider">Cash on Delivery</span>
+                          <div className="flex items-center justify-between mb-2 gap-2">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <Banknote className="w-4 h-4 text-primary shrink-0" />
+                              <span className="text-xs font-bold uppercase tracking-wider truncate">Cash on Delivery</span>
                             </div>
                             <span
-                              className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
+                              className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 ${
                                 paymentMethod === "cod" ? "border-primary bg-primary" : "border-border"
                               }`}
                             >
@@ -861,19 +887,19 @@ export default function CartCheckoutPage({
                         {/* Online Transfer */}
                         <div
                           onClick={() => setPaymentMethod("online")}
-                          className={`p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
+                          className={`p-3.5 sm:p-4 rounded-xl border cursor-pointer transition-all flex flex-col justify-between ${
                             paymentMethod === "online"
                               ? "border-primary bg-primary/5 ring-1 ring-primary"
                               : "border-border hover:border-primary/50 bg-background"
                           }`}
                         >
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <Smartphone className="w-4 h-4 text-primary" />
-                              <span className="text-xs font-bold uppercase tracking-wider">Bank Transfer / Easypaisa</span>
+                          <div className="flex items-center justify-between mb-2 gap-2">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <Smartphone className="w-4 h-4 text-primary shrink-0" />
+                              <span className="text-xs font-bold uppercase tracking-wider leading-snug">Bank Transfer / Easypaisa</span>
                             </div>
                             <span
-                              className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${
+                              className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 ${
                                 paymentMethod === "online" ? "border-primary bg-primary" : "border-border"
                               }`}
                             >
@@ -888,21 +914,21 @@ export default function CartCheckoutPage({
 
                       {/* Easypaisa details if online transfer selected */}
                       {paymentMethod === "online" && (
-                        <div className="rounded-xl border border-primary/30 bg-muted/30 p-5 space-y-4 animate-fade-in">
-                          <div className="p-4 rounded-xl bg-background border border-border space-y-3">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground block">
+                        <div className="rounded-xl border border-primary/30 bg-muted/30 p-3.5 sm:p-5 space-y-3.5 sm:space-y-4 animate-fade-in">
+                          <div className="p-3.5 sm:p-4 rounded-xl bg-background border border-border space-y-3">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-2">
+                              <div className="min-w-0">
+                                <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground block mb-0.5">
                                   Easypaisa Mobile Account Number
                                 </span>
-                                <span className="text-base sm:text-lg font-mono font-bold tracking-wider text-foreground">
+                                <span className="text-base sm:text-lg font-mono font-bold tracking-wider text-foreground break-all">
                                   {BRAND_INFO.whatsappNumber}
                                 </span>
                               </div>
                               <button
                                 type="button"
                                 onClick={handleCopyEasypaisa}
-                                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border hover:bg-muted text-xs font-mono transition-colors cursor-pointer"
+                                className="self-start sm:self-auto shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border hover:bg-muted text-xs font-mono transition-colors cursor-pointer active:scale-95"
                               >
                                 {copiedNumber ? (
                                   <>
@@ -918,17 +944,18 @@ export default function CartCheckoutPage({
                               </button>
                             </div>
 
-                            <div className="pt-2 border-t border-border/50 flex items-center justify-between">
-                              <div>
-                                <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground block">
+                            <div className="pt-2.5 border-t border-border/50 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+                              <div className="min-w-0">
+                                <span className="text-[9px] font-mono uppercase tracking-widest text-muted-foreground block mb-0.5">
                                   Account Title
                                 </span>
-                                <span className="text-sm font-bold text-foreground">
+                                <span className="text-sm font-bold text-foreground break-words">
                                   {BRAND_INFO.easypaisaTitle}
                                 </span>
                               </div>
-                              <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium">
-                                Verified Title
+                              <span className="inline-flex items-center gap-1 text-[10px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-medium border border-emerald-500/20 shrink-0">
+                                <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                                <span>Verified Title</span>
                               </span>
                             </div>
                           </div>
@@ -936,14 +963,17 @@ export default function CartCheckoutPage({
                           {/* Receipt upload or TID */}
                           <div className="space-y-3">
                             <label className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                              Payment Screenshot (Optional / For prepaid orders)
+                              Payment Screenshot <span className="text-muted-foreground/60 text-[9px] font-normal">(Optional / For prepaid orders)</span>
                             </label>
 
                             {!receiptPreviewUrl ? (
-                              <label className="border-2 border-dashed border-border rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-colors bg-background hover:bg-muted/40">
-                                <UploadCloud className="w-6 h-6 text-muted-foreground mb-1" />
-                                <span className="text-xs font-semibold text-foreground">
-                                  Attach receipt screenshot (or share in WhatsApp)
+                              <label className="border-2 border-dashed border-border rounded-xl p-3.5 sm:p-4 flex flex-col items-center justify-center cursor-pointer transition-colors bg-background hover:bg-muted/40 text-center">
+                                <UploadCloud className="w-6 h-6 text-muted-foreground mb-1 shrink-0" />
+                                <span className="text-xs font-semibold text-foreground px-2">
+                                  Attach receipt screenshot <span className="text-muted-foreground font-normal">(or share in WhatsApp)</span>
+                                </span>
+                                <span className="text-[10px] text-muted-foreground mt-0.5">
+                                  PNG, JPG or screenshot up to 5MB
                                 </span>
                                 <input
                                   type="file"
@@ -957,18 +987,18 @@ export default function CartCheckoutPage({
                                 <img
                                   src={receiptPreviewUrl}
                                   alt="Receipt"
-                                  className="w-12 h-12 object-cover rounded-md border"
+                                  className="w-12 h-12 object-cover rounded-md border shrink-0"
                                 />
                                 <div className="flex-1 min-w-0 text-xs">
                                   <span className="font-semibold text-emerald-600 flex items-center gap-1">
-                                    <FileCheck className="w-3.5 h-3.5" /> Screenshot Attached
+                                    <FileCheck className="w-3.5 h-3.5 shrink-0" /> Screenshot Attached
                                   </span>
                                   <p className="text-[10px] text-muted-foreground truncate">{receiptFile?.name}</p>
                                 </div>
                                 <button
                                   type="button"
                                   onClick={handleRemoveReceipt}
-                                  className="p-1 text-muted-foreground hover:text-destructive"
+                                  className="p-1 text-muted-foreground hover:text-destructive shrink-0"
                                 >
                                   <X className="w-4 h-4" />
                                 </button>
@@ -977,14 +1007,14 @@ export default function CartCheckoutPage({
 
                             <div>
                               <label className="block text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-1">
-                                Transaction ID / TID (Optional)
+                                Transaction ID / TID <span className="text-muted-foreground/60 text-[9px] font-normal">(Optional)</span>
                               </label>
                               <input
                                 type="text"
                                 value={transactionId}
                                 onChange={(e) => setTransactionId(e.target.value)}
                                 placeholder="e.g. 39281920391"
-                                className="w-full px-4 py-2 rounded-lg border border-border bg-background text-sm font-mono focus:outline-none focus:ring-1 focus:ring-primary"
+                                className="w-full px-3.5 sm:px-4 py-2 rounded-lg border border-border bg-background text-sm font-mono focus:outline-none focus:ring-1 focus:ring-primary"
                               />
                             </div>
                           </div>
@@ -1040,8 +1070,8 @@ export default function CartCheckoutPage({
 
                 {/* 4. Consent Checkbox with Custom Animated SVG */}
                 <div className="pt-2">
-                  <div className="flex items-start gap-3 text-xs text-muted-foreground">
-                    <div className="custom-checkbox-wrapper mt-0.5">
+                  <div className="flex items-start gap-2.5 sm:gap-3 text-xs text-muted-foreground">
+                    <div className="custom-checkbox-wrapper mt-0.5 shrink-0">
                       <input
                         type="checkbox"
                         id="cbx-consent"
@@ -1055,8 +1085,8 @@ export default function CartCheckoutPage({
                         </svg>
                       </label>
                     </div>
-                    <label htmlFor="cbx-consent" className="cursor-pointer select-none leading-relaxed">
-                      I agree to share these order details with <strong>Raj&apos;s By AZ</strong> on WhatsApp under our{" "}
+                    <label htmlFor="cbx-consent" className="cursor-pointer select-none text-[11px] sm:text-xs text-muted-foreground leading-normal">
+                      I agree to the{" "}
                       {onOpenPrivacy ? (
                         <button
                           type="button"
@@ -1066,17 +1096,17 @@ export default function CartCheckoutPage({
                           }}
                           className="underline underline-offset-2 hover:text-foreground font-medium transition-colors cursor-pointer"
                         >
-                          Privacy &amp; Discretion Charter
+                          Privacy Charter
                         </button>
                       ) : (
                         <a
                           href="/privacy"
                           className="underline underline-offset-2 hover:text-foreground font-medium"
                         >
-                          Privacy &amp; Discretion Charter
+                          Privacy Charter
                         </a>
                       )}{" "}
-                      to request order confirmation.
+                      to confirm this order.
                     </label>
                   </div>
                   {formErrors.consent && (
@@ -1090,14 +1120,14 @@ export default function CartCheckoutPage({
                     type="submit"
                     variant="whatsapp"
                     controlledPhase={isSubmitting ? "loading" : "idle"}
-                    label={`Confirm & Place Order · Rs. ${subtotal.toLocaleString()}`}
-                    loadingLabel="Preparing Your Order..."
+                    label={`Confirm Order · Rs. ${subtotal.toLocaleString()}`}
+                    loadingLabel="Preparing Order..."
                     addedLabel="Order Prepared!"
                     icon={<MessageCircle className="w-4 h-4 shrink-0" />}
-                    className="w-full h-14 rounded-full text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-lg"
+                    className="w-full h-12 sm:h-14 rounded-full text-xs font-semibold uppercase tracking-wider whitespace-nowrap shadow-lg px-4"
                   />
 
-                  <p className="text-center text-[11px] text-muted-foreground font-light">
+                  <p className="text-center text-[10px] sm:text-[11px] text-muted-foreground font-light leading-relaxed">
                     Your order details will open securely in WhatsApp. Tap <strong>Send</strong> to confirm with our concierge.
                   </p>
                 </div>

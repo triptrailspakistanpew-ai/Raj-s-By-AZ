@@ -107,11 +107,32 @@ export default function App() {
       }
     }
 
+    const handleDocumentClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement)?.closest?.("a")
+      if (target) {
+        const href = target.getAttribute("href")
+        if (href && href.startsWith("/products/")) {
+          e.preventDefault()
+          const handle = href.replace("/products/", "")
+          const prod = GIFT_BOX_PRODUCTS.find((p) => p.handle === handle)
+          if (prod) {
+            setActiveModalProduct(prod)
+            setAddedToBag(false)
+            if (typeof window !== "undefined" && window.history?.pushState) {
+              window.history.pushState({ handle }, "", `/products/${prod.handle}`)
+            }
+          }
+        }
+      }
+    }
+
+    document.addEventListener("click", handleDocumentClick)
     window.addEventListener("open-product-preview", handleQuickView)
     window.addEventListener("popstate", handlePopState)
 
     return () => {
       cancelAnimationFrame(rafId)
+      document.removeEventListener("click", handleDocumentClick)
       window.removeEventListener("open-product-preview", handleQuickView)
       window.removeEventListener("popstate", handlePopState)
       lenis.destroy()
