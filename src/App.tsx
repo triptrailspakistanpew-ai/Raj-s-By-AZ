@@ -301,7 +301,7 @@ export default function App() {
       </header>
 
       {/* Main View: Showcase, Cart, or Privacy Policy Page */}
-      <main className="relative pt-16">
+      <main className="relative z-10 bg-background pt-16">
         {currentPage === "showcase" ? (
           <DemoOne />
         ) : currentPage === "cart" ? (
