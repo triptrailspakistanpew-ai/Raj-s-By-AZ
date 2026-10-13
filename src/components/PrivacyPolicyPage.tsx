@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import { BRAND_INFO } from "@/src/data/products"
 import { motion } from "motion/react"
+import { BrandLogoIcon } from "@/src/components/BrandLogo"
 
 interface PrivacyPolicyPageProps {
   onBackToStore: () => void
@@ -122,7 +123,7 @@ export default function PrivacyPolicyPage({
         <div className="pt-10 pb-12 sm:pb-14">
           <div className="max-w-2xl space-y-3">
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground font-medium">
-              <Sparkles className="w-3.5 h-3.5 text-[#E8C5A7]" />
+              <BrandLogoIcon size={18} />
               <span>Raj&apos;s By AZ · Privacy Promise</span>
             </div>
 

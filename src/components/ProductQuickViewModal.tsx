@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "motion/react"
 import { GiftBoxProduct, BRAND_INFO } from "@/src/data/products"
+import { BrandLogoIcon } from "@/src/components/BrandLogo"
 import {
   X,
   ShieldCheck,
@@ -107,6 +108,7 @@ export default function ProductQuickViewModal({
             {/* Desktop Header */}
             <div className="flex items-center justify-between px-8 py-5 border-b border-border bg-background/95 backdrop-blur-md shrink-0">
               <div className="flex items-center gap-2.5">
+                <BrandLogoIcon size={26} />
                 <span className="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground font-light">
                   {BRAND_INFO.name} · {product.collection.title}
                 </span>
@@ -300,6 +302,7 @@ export default function ProductQuickViewModal({
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
+                  <BrandLogoIcon size={24} />
                   <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-muted-foreground">
                     {product.collection.title}
                   </span>

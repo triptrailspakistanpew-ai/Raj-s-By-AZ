@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import { Button } from "./button"
 import { BRAND_INFO } from "@/src/data/products"
+import { BrandLogoWithText, BrandLogoIcon } from "@/src/components/BrandLogo"
 
 interface FooterLink {
   title: string
@@ -138,18 +139,12 @@ export function StickyFooter({
             <div className="flex flex-col gap-6 md:flex-row md:justify-between items-start pt-1">
               {/* Brand Col */}
               <AnimatedContainer className="w-full md:max-w-xs space-y-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#161311] text-[#FFB68B] flex items-center justify-center shadow-md">
-                    <Sparkles className="size-3.5 sm:size-4" />
-                  </div>
-                  <div>
-                    <span className="font-bold text-sm sm:text-base tracking-[0.25em] uppercase block">
-                      {BRAND_INFO.name}
-                    </span>
-                    <span className="text-[9px] sm:text-[10px] uppercase tracking-widest text-muted-foreground block font-light">
-                      {BRAND_INFO.tagline}
-                    </span>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <BrandLogoWithText
+                    iconSize={42}
+                    onClick={() => onNavigate?.("showcase")}
+                    className="cursor-pointer"
+                  />
                 </div>
 
                 <p className="text-muted-foreground text-xs sm:text-sm font-light leading-relaxed max-w-sm">

@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none" width="100%" height="100%">
+  <!-- Definitions for gradients and shadows -->
+  <defs>
+    <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <!-- Group containing the Rainbow Arches -->
+  <g id="rainbow-arches" stroke-linecap="butt" filter="url(#softGlow)">
+    <!-- Outer Arch: Soft Terracotta / Dusty Rose -->
+    <path 
+      d="M 20 96 L 20 62 A 40 40 0 0 1 100 62 L 100 96" 
+      stroke="#D58380" 
+      stroke-width="8.5" 
+      fill="none" 
+    />
+    
+    <!-- Middle Arch: Warm Oatmeal / Soft Wheat Cream -->
+    <path 
+      d="M 32 96 L 32 62 A 28 28 0 0 1 88 62 L 88 96" 
+      stroke="#DFCEBA" 
+      stroke-width="8" 
+      fill="none" 
+    />
+    
+    <!-- Inner Arch: Peachy Blush Rose -->
+    <path 
+      d="M 43.5 96 L 43.5 62 A 16.5 16.5 0 0 1 76.5 62 L 76.5 96" 
+      stroke="#EDB5A8" 
+      stroke-width="7.5" 
+      fill="none" 
+    />
+  </g>
+
+  <!-- Ribbon Bow at the Apex -->
+  <g id="ribbon-bow" fill="#D97A84">
+    <!-- Left Ribbon Loop -->
+    <path 
+      d="M 57 23 C 51 22, 42 16, 42 11 C 42 7.5, 46.5 6.5, 50 9 C 54 12, 57 18.5, 58.5 21 Z" 
+      stroke="#C96874" 
+      stroke-width="0.8" 
+    />
+    <!-- Left Loop Inner Fold -->
+    <path 
+      d="M 53 14 C 49 11, 46 11, 46 12 C 46 13.5, 49 16, 54 18" 
+      stroke="#C96874" 
+      stroke-width="0.6" 
+      fill="none" 
+      opacity="0.5" 
+    />
+
+    <!-- Right Ribbon Loop -->
+    <path 
+      d="M 63 23 C 69 22, 78 16, 78 11 C 78 7.5, 73.5 6.5, 70 9 C 66 12, 63 18.5, 61.5 21 Z" 
+      stroke="#C96874" 
+      stroke-width="0.8" 
+    />
+    <!-- Right Loop Inner Fold -->
+    <path 
+      d="M 67 14 C 71 11, 74 11, 74 12 C 74 13.5, 71 16, 66 18" 
+      stroke="#C96874" 
+      stroke-width="0.6" 
+      fill="none" 
+      opacity="0.5" 
+    />
+
+    <!-- Left Ribbon Tail (draping down) -->
+    <path 
+      d="M 57 24 C 55 28, 49 37, 47 43 C 49.5 42, 52 42.5, 54 44 C 54.5 39, 58 29, 60 25 Z" 
+      fill="#CE6E79" 
+    />
+
+    <!-- Right Ribbon Tail (draping down) -->
+    <path 
+      d="M 63 24 C 65 28, 71 37, 73 43 C 70.5 42, 68 42.5, 66 44 C 65.5 39, 62 29, 60 25 Z" 
+      fill="#CE6E79" 
+    />
+
+    <!-- Center Knot of Bow -->
+    <ellipse cx="60" cy="22.5" rx="3.8" ry="3.2" fill="#D97A84" stroke="#B85964" stroke-width="0.8" />
+    <path d="M 58.5 21.5 C 59.5 22.8, 60.5 22.8, 61.5 21.5" stroke="#FFFFFF" stroke-width="0.75" stroke-linecap="round" fill="none" opacity="0.6" />
+  </g>
+</svg>

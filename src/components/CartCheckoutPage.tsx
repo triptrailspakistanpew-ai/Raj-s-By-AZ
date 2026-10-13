@@ -23,6 +23,7 @@ import {
 } from "lucide-react"
 import { BRAND_INFO } from "@/src/data/products"
 import { AddToCartButton } from "@/src/components/ui/add-to-cart-button"
+import { BrandLogoIcon } from "@/src/components/BrandLogo"
 
 export interface CartItem {
   id: string
@@ -418,6 +419,7 @@ export default function CartCheckoutPage({
           </button>
           
           <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs uppercase font-mono tracking-wider text-muted-foreground shrink-0">
+            <BrandLogoIcon size={18} />
             <span className="text-foreground font-semibold hidden sm:inline">Raj's By AZ Checkout</span>
             <span className="text-foreground font-semibold sm:hidden">Checkout</span>
             <span className="text-border">/</span>
@@ -451,8 +453,8 @@ export default function CartCheckoutPage({
         {cart.length === 0 ? (
           /* Empty State */
           <div className="border border-dashed border-border/80 rounded-2xl p-12 text-center max-w-2xl mx-auto my-12 bg-card/40">
-            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4 text-muted-foreground">
-              <Gift className="w-8 h-8 text-primary" />
+            <div className="w-16 h-16 rounded-full bg-muted/60 flex items-center justify-center mx-auto mb-4 text-muted-foreground p-3 border border-border/60">
+              <BrandLogoIcon size={46} />
             </div>
             <h3 className="text-lg font-semibold uppercase tracking-wider mb-2">
               Your gift bag is waiting.
@@ -487,15 +489,18 @@ export default function CartCheckoutPage({
             >
               <div className="border border-border bg-card rounded-2xl p-4 sm:p-6 shadow-sm">
                 <div className="flex items-center justify-between pb-4 border-b border-border mb-6">
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-wider">
-                      Boxes in Gift Bag ({cart.length})
-                    </h2>
-                    {cart.length > 2 && (
-                      <span className="text-[10px] text-muted-foreground font-mono">
-                        Scroll to see all ({cart.length}) boxes
-                      </span>
-                    )}
+                  <div className="flex items-center gap-2">
+                    <BrandLogoIcon size={20} />
+                    <div>
+                      <h2 className="text-sm font-bold uppercase tracking-wider">
+                        Boxes in Gift Bag ({cart.length})
+                      </h2>
+                      {cart.length > 2 && (
+                        <span className="text-[10px] text-muted-foreground font-mono">
+                          Scroll to see all ({cart.length}) boxes
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <button
                     onClick={onAddSampleItem}

@@ -13,6 +13,7 @@ import { ShoppingBag, ArrowUpRight, ArrowLeft } from "lucide-react"
 import { GIFT_BOX_PRODUCTS, GiftBoxProduct, BRAND_INFO } from "@/src/data/products"
 import { updateHeadSeo } from "@/src/utils/seo"
 import { StickyFooter } from "@/components/ui/sticky-footer"
+import { BrandLogoWithText } from "@/src/components/BrandLogo"
 
 export default function App() {
   const lenisRef = useRef<Lenis | null>(null)
@@ -268,9 +269,10 @@ export default function App() {
           <div className="flex items-center gap-6">
             <button
               onClick={() => navigateTo("showcase")}
-              className="font-bold text-sm sm:text-base tracking-[0.3em] uppercase hover:opacity-80 transition-opacity cursor-pointer text-left"
+              className="hover:opacity-85 transition-opacity cursor-pointer text-left focus:outline-none"
+              aria-label="Raj's By AZ - Home"
             >
-              {BRAND_INFO.name}
+              <BrandLogoWithText iconSize={36} />
             </button>
             <span className="hidden sm:inline-block text-[10px] uppercase tracking-widest text-muted-foreground border-l border-border/60 pl-6">
               {BRAND_INFO.tagline}
@@ -288,20 +290,12 @@ export default function App() {
                 <span className="hidden sm:inline">Back to Showcase</span>
               </button>
             ) : (
-              <>
-                <button
-                  onClick={() => navigateTo("privacy")}
-                  className="text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer hidden lg:inline"
-                >
-                  Privacy Charter
-                </button>
-                <button
-                  onClick={() => navigateTo("cart")}
-                  className="text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer hidden md:inline"
-                >
-                  Checkout
-                </button>
-              </>
+              <button
+                onClick={() => navigateTo("cart")}
+                className="text-xs uppercase tracking-widest font-semibold text-muted-foreground hover:text-foreground transition-colors cursor-pointer hidden md:inline"
+              >
+                Checkout
+              </button>
             )}
 
             {/* Bag counter */}

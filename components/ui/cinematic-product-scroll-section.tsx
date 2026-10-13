@@ -15,6 +15,7 @@ import {
   BRAND_INFO,
 } from "@/src/data/products"
 import { EditorialHeroContraction } from "./editorial-hero-contraction"
+import { BrandLogoIcon } from "@/src/components/BrandLogo"
 
 // 1. Minimal Product Card Component
 function MinimalProductCard({ product }: { product: GiftBoxProduct }) {
@@ -967,6 +968,9 @@ export function Component() {
         <div className="absolute w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
 
         <div className="relative z-10 max-w-2xl mx-auto space-y-4">
+          <div className="flex justify-center mb-1">
+            <BrandLogoIcon size={52} className="hover:scale-105 transition-transform" />
+          </div>
           <span className="text-[9px] md:text-[10px] font-black text-muted-foreground uppercase tracking-[0.4em] block font-light">
             A LITTLE SURPRISE, A LOT OF LOVE
           </span>
