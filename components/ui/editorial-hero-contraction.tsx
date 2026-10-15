@@ -31,7 +31,7 @@ export function VisageHeroSection({
   description = "A little beauty, beautifully gifted. Discover thoughtfully curated gift boxes filled with makeup, jewellery and pretty accessories. Perfect for birthdays, special celebrations and treating yourself.",
   ctaText = "EXPLORE BOXES",
   ctaHref = "#final-collection",
-  modelImage = "https://framerusercontent.com/images/38sdJLnZxhbfgX2J3pauAmW4HPc.jpg",
+  modelImage = "https://res.cloudinary.com/dvyhnxnpq/image/upload/v1792107554/f2aa790a-c6cb-4e77-b6a7-215b5c77cded_kggm6t.webp",
 }: EditorialHeroProps) {
   const [loaded, setLoaded] = useState(false)
   const [scrollY, setScrollY] = useState(0)

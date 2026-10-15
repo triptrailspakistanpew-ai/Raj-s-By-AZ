@@ -60,7 +60,7 @@ export const GIFT_BOX_PRODUCTS: GiftBoxProduct[] = [
       "Cosmetic pouch"
     ],
     thumbnail:
-      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1200&q=80",
+      "https://res.cloudinary.com/dvyhnxnpq/image/upload/v1792085888/adc96011-4afc-4614-8752-c7dba986dc98_juwzbq.webp?auto=format&fit=crop&w=1200&q=80",
     featured: false,
     collection: {
       title: "14-Item Collection"
@@ -107,7 +107,7 @@ export const GIFT_BOX_PRODUCTS: GiftBoxProduct[] = [
       "Jewellery pouch"
     ],
     thumbnail:
-      "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=80",
+      "https://res.cloudinary.com/dvyhnxnpq/image/upload/v1792085888/56cffae3-5cc4-45af-b8fa-44a4cb5a5e92_e4qct2.webp?auto=format&fit=crop&w=1200&q=80",
     featured: true,
     collection: {
       title: "Featured 20-Item Box"
@@ -158,7 +158,7 @@ export const GIFT_BOX_PRODUCTS: GiftBoxProduct[] = [
       "Satin hair bow"
     ],
     thumbnail:
-      "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=1200&q=80",
+      "https://res.cloudinary.com/dvyhnxnpq/image/upload/v1792085888/a6630539-e053-471b-84cb-6f0229ec1bcc_jk0or5.webp?auto=format&fit=crop&w=1200&q=80",
     featured: false,
     collection: {
       title: "Deluxe 25-Item Box"
@@ -186,6 +186,7 @@ export const OCCASIONS = [
     title: "For Her Birthday",
     description: "Make her birthday a little brighter with a box full of lovely surprises.",
     image: "https://images.unsplash.com/photo-1513151233558-d860c5398176?auto=format&fit=crop&w=800&q=80",
+    video: "/videos/occasion-birthday.mp4",
     tag: "Celebration"
   },
   {
@@ -193,6 +194,7 @@ export const OCCASIONS = [
     title: "For Someone Special",
     description: "A thoughtful little gift for the person who makes your world more beautiful.",
     image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80",
+    video: "/videos/occasion-sister.mp4",
     tag: "Romance & Love"
   },
   {
@@ -200,6 +202,7 @@ export const OCCASIONS = [
     title: "Just Because",
     description: "Because you don't need a special occasion to make someone smile.",
     image: "https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=800&q=80",
+    video: "/videos/birthday-deal.mp4",
     tag: "Everyday Joy"
   }
 ]

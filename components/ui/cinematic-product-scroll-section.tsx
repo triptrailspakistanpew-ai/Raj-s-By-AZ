@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { ArrowDown, Eye, Plus, Minus, MessageCircle, ChevronDown } from "lucide-react"
+import { ArrowDown, Eye, Plus, Minus, MessageCircle, ChevronDown, Volume2, VolumeX, Play } from "lucide-react"
 import { animate, stagger } from "animejs"
 import Link from "next/link"
 import {
@@ -375,6 +375,166 @@ function ProductHero({ product, reversed = false }: { product: GiftBoxProduct; r
   )
 }
 
+// Occasion Video Player with automatic autoplay as soon as it enters viewport
+function OccasionVideoPlayer({
+  videoSrc,
+  poster,
+  title,
+}: {
+  videoSrc: string
+  poster: string
+  title: string
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // As soon as it is visible, it will start playing
+            video.muted = true
+            const playPromise = video.play()
+            if (playPromise !== undefined) {
+              playPromise
+                .then(() => setIsPlaying(true))
+                .catch(() => {
+                  video.muted = true
+                  video.play().then(() => setIsPlaying(true)).catch(() => {})
+                })
+            }
+          } else {
+            video.pause()
+            setIsPlaying(false)
+          }
+        })
+      },
+      {
+        threshold: 0.15, // Starts playing as soon as 15% is visible
+      }
+    )
+
+    observer.observe(video)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  // Coordinate muting so only one video plays sound at a time
+  useEffect(() => {
+    const handleOtherUnmuted = (e: Event) => {
+      const customEvent = e as CustomEvent<{ src: string }>
+      if (customEvent.detail?.src !== videoSrc) {
+        setIsMuted(true)
+        if (videoRef.current) {
+          videoRef.current.muted = true
+        }
+      }
+    }
+
+    window.addEventListener("occasion-video-unmute", handleOtherUnmuted)
+    return () => {
+      window.removeEventListener("occasion-video-unmute", handleOtherUnmuted)
+    }
+  }, [videoSrc])
+
+  const handleToggleSound = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    const video = videoRef.current
+    if (!video) return
+    const nextMuted = !isMuted
+    video.muted = nextMuted
+    setIsMuted(nextMuted)
+    if (!nextMuted) {
+      window.dispatchEvent(
+        new CustomEvent("occasion-video-unmute", {
+          detail: { src: videoSrc },
+        })
+      )
+    }
+    if (video.paused) {
+      video.play().then(() => setIsPlaying(true)).catch(() => {})
+    }
+  }
+
+  const handleTogglePlay = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (target.closest("a") || target.closest("button")) return
+
+    const video = videoRef.current
+    if (!video) return
+    if (video.paused) {
+      video.play().then(() => setIsPlaying(true)).catch(() => {})
+    } else {
+      video.pause()
+      setIsPlaying(false)
+    }
+  }
+
+  return (
+    <div
+      onClick={handleTogglePlay}
+      className="relative aspect-[3/4] w-full overflow-hidden bg-black select-none cursor-pointer group/video"
+    >
+      <video
+        ref={videoRef}
+        src={videoSrc}
+        poster={poster}
+        muted={isMuted}
+        playsInline
+        loop
+        preload="auto"
+        className="w-full h-full object-cover transition-opacity duration-700"
+        aria-label={title}
+      />
+
+
+      {/* Sound Toggle Button */}
+      <button
+        type="button"
+        onClick={handleToggleSound}
+        title={isMuted ? "Unmute audio" : "Mute audio"}
+        className="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-md text-white border border-white/20 flex items-center justify-center transition-all cursor-pointer shadow-md active:scale-95"
+      >
+        {isMuted ? (
+          <VolumeX className="w-3.5 h-3.5 text-white/80" />
+        ) : (
+          <Volume2 className="w-3.5 h-3.5 text-rose-300" />
+        )}
+      </button>
+
+      {/* Play/Pause indicator when user manually pauses */}
+      {!isPlaying && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+          <div className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white shadow-xl">
+            <Play className="w-5 h-5 ml-0.5 fill-white text-white" />
+          </div>
+        </div>
+      )}
+
+      {/* Subtle bottom gradient on hover (desktop only) */}
+      <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+
+      {/* Custom Hover Action (desktop only) */}
+      <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) z-30 w-fit translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+        <a
+          href="#final-collection"
+          className="block bg-background/80 backdrop-blur-md text-foreground text-[8px] sm:text-[10px] uppercase tracking-normal font-medium py-1.5 px-3 sm:py-3 sm:px-8 rounded-full border border-border whitespace-nowrap shadow-xl hover:bg-primary hover:text-primary-foreground transition-colors duration-300 cursor-pointer"
+        >
+          Explore Collection
+        </a>
+      </div>
+    </div>
+  )
+}
+
 // 3. Main Unified Component
 export function Component() {
   const finalTitle = "RAJ'S BY AZ"
@@ -499,6 +659,7 @@ export function Component() {
         description="A little beauty, beautifully gifted. Discover thoughtfully curated gift boxes filled with makeup, jewellery and pretty accessories. Perfect for birthdays, special celebrations and treating yourself."
         ctaText="EXPLORE BOXES"
         ctaHref="#final-collection"
+        modelImage="https://res.cloudinary.com/dvyhnxnpq/image/upload/v1792107554/f2aa790a-c6cb-4e77-b6a7-215b5c77cded_kggm6t.webp"
       />
 
       {/* 2. Products - Render ProductHero for each item */}
@@ -694,26 +855,34 @@ export function Component() {
                 key={occ.id}
                 className="group relative block w-full h-full bg-transparent overflow-hidden border border-border/30 hover:border-primary/50 transition-colors duration-700"
               >
-                {/* Image Section */}
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
-                  <Image
-                    src={occ.image}
-                    alt={`${occ.title} - ${occ.tag} Gift Box by Raj's By AZ`}
-                    fill
-                    className="object-cover md:grayscale md:opacity-90 md:group-hover:grayscale-0 md:group-hover:opacity-100 transition-all duration-1000 ease-out"
-                    sizes="(max-width: 768px) 100vw, 33vw"
+                {/* Media Section: Video or Image */}
+                {occ.video ? (
+                  <OccasionVideoPlayer
+                    videoSrc={occ.video}
+                    poster={occ.image}
+                    title={occ.title}
                   />
-                  <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                ) : (
+                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-muted">
+                    <Image
+                      src={occ.image}
+                      alt={`${occ.title} - ${occ.tag} Gift Box by Raj's By AZ`}
+                      fill
+                      className="object-cover md:grayscale md:opacity-90 md:group-hover:grayscale-0 md:group-hover:opacity-100 transition-all duration-1000 ease-out"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                    />
+                    <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
 
-                  <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 z-30 w-fit">
-                    <a
-                      href="#final-collection"
-                      className="block bg-background/80 backdrop-blur-md text-foreground text-[8px] sm:text-[10px] uppercase tracking-normal font-medium py-1.5 px-3 sm:py-3 sm:px-8 rounded-full border border-border whitespace-nowrap shadow-xl hover:bg-primary hover:text-primary-foreground transition-colors duration-300"
-                    >
-                      Explore Collection
-                    </a>
+                    <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 z-30 w-fit">
+                      <a
+                        href="#final-collection"
+                        className="block bg-background/80 backdrop-blur-md text-foreground text-[8px] sm:text-[10px] uppercase tracking-normal font-medium py-1.5 px-3 sm:py-3 sm:px-8 rounded-full border border-border whitespace-nowrap shadow-xl hover:bg-primary hover:text-primary-foreground transition-colors duration-300"
+                      >
+                        Explore Collection
+                      </a>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Typography */}
                 <div className="flex flex-col items-center justify-center text-center p-4 sm:p-6 md:p-8 bg-transparent relative z-20">
