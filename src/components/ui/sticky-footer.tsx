@@ -1,2 +1,2 @@
-export * from "@/components/ui/sticky-footer"
-export { default } from "@/components/ui/sticky-footer"
+export * from "@/src/components/layout/StickyFooter"
+export { default } from "@/src/components/layout/StickyFooter"
